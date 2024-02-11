@@ -29,7 +29,6 @@ label {
     font-weight: bold;
 }
 
-
 section {
     background-color: #fff;
     border-radius: 8px;
@@ -52,8 +51,8 @@ li {
 }
 
 footer {
-    background-color: #333;
-    color: #fff;
+    background-color: #ffffff;
+    color: #ffffff;
     text-align: center;
     padding: 1rem 0;
 }
