@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Pin to the Map</title>
+    <link rel="stylesheet" href="stylesheets/pinstyle.css">
+</head>
+<body>
+    <header>
+        <h1>Add a Pin to the Map</h1>
+    </header>
+    <main>
+        <form id="pin-form">
+            <div class="form-group">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="first-name" required>
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="last-name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">University of Portland Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Where did you travel?</label>
+                <input type="text" id="location" name="location" placeholder="Enter a location" required>
+            </div>
+            <div class="form-group">
+                <label for="purpose">What did you travel for?</label>
+                <select id="purpose" name="purpose" required>
+                    <option value="international work">International Work</option>
+                    <option value="volunteer work">Volunteer Work</option>
+                    <option value="study abroad">Study Abroad</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group" id="other-purpose" style="display: none;">
+                <label for="other-purpose-input">Please specify:</label>
+                <input type="text" id="other-purpose-input" name="other-purpose-input">
+            </div>
+            <div class="form-group">
+                <label for="experience">Tell us about your experience:</label>
+                <textarea id="experience" name="experience" rows="4" required></textarea>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="thank-you" style="display: none;">
+            <h2>Thank you for your submission!</h2>
+            <p>Your input will be reviewed and a copy of your response will be sent to your email.</p>
+            <a href="#" id="submit-another-pin">Submit Another Pin</a>
+            <a href="#" id="home">Home</a>
+        </div>
+    </main>
+    <footer>
+        <!-- Footer content -->
+    </footer>
+    <script src="javascripts/pin.js"></script>
+</body>
+</html>
