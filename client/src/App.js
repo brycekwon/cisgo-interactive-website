@@ -7,7 +7,6 @@ const Home = lazy(() => import('./pages/Home.js'));
 
 const App = () => {
   return (
-    // <div id="root"></div>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
