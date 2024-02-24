@@ -1,9 +1,11 @@
 import React from 'react';
 
+import '../static/css/pages/Help.css';
+
 const Help = () => {
   return (
     <div>
-      <h1>Hello World</h1>
+      <h1>Help</h1>
     </div>
   );
 }
