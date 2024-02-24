@@ -1,4 +1,6 @@
 .world_map {
+  margin-left: 5%;
+
   svg path {
     fill: rgb(56, 78, 29);
     stroke: rgb(34, 59, 5);

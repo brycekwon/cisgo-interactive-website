@@ -1,0 +1,25 @@
+opened {
+    background-color: rgba(0, 0, 0, 0.5);
+    list-style-type: none;
+    height: 100%;
+    width: 15%;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    overflow: x-hidden;
+}
+
+expanded {
+  font-family: 'Times New Roman', serif;
+  font-size: 20px;
+  text-align: left;
+  color: white;
+  width: 100%;
+  border: none;
+  background: none;
+}
+
+li:hover button:hover {
+    background-color: rgba(0, 0, 0, 1);
+}
+
