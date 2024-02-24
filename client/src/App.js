@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 
-
+const Main = lazy(() => import('./layouts/Main.js'));
 const Home = lazy(() => import('./pages/Home.js'));
 const AddPin = lazy(() => import("./pages/AddPin.js"));
 const Search = lazy(() => import('./pages/Search.js'));
@@ -14,7 +14,7 @@ const Login = lazy(() => import('./pages/Login.js'));
 const App = () => {
   return (
     <BrowserRouter>
-      <Suspense>
+      <Suspense fallback={<Main />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/add" element={<AddPin />} />
