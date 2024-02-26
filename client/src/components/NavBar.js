@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom';
 import '../static/css/components/NavBar.css';
 
 const NavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(true);
   const [filterOpen, setFilterOpen] = useState(false);
-
-  const handleNavMenu = () => {
-    setMenuOpen(!menuOpen);
-  }
 
   const handleFilterMenu = () => {
     setFilterOpen(!filterOpen);
@@ -18,9 +13,9 @@ const NavBar = () => {
   return (
     <ul className="opened">
       <li className="expanded">
-        <Link onClick={handleNavMenu}>
-          <i class="material-icons">menu</i>
-          Menu
+        <Link to="/">
+          <i class="material-icons">home</i>
+          Home
         </Link>
       </li>
       <li className="expanded">
