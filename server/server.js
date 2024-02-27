@@ -1,5 +1,4 @@
 import express from 'express';
-import path from 'path';
 import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
