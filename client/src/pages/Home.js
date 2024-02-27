@@ -7,6 +7,7 @@ import NavBar from '../components/NavBar.js';
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState([]);
+  const [map, setMap] = useState(null)
 
   useEffect(() => {
     setLoading(true);
@@ -16,7 +17,8 @@ const Home = () => {
     }).catch((err) => {
         console.log(err);
         setLoading(false);
-      });
+    });
+    setMap(new WorldMap());
   }, []);
 
   if (loading) {
@@ -28,7 +30,7 @@ const Home = () => {
   return (
     <div className="body">
       <NavBar />
-      <WorldMap />
+      {map.render()}
     </div>
   );
 }
