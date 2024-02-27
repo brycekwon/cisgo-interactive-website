@@ -7,7 +7,7 @@ let experiencesRouter = Router();
 experiencesRouter.get("/", async function (req, res) {
 	// TODO: GET /
 	// Add support for querystring searching
-	console.log(req.hostname);
+	// console.log(req.hostname);
 	const experiences = await experienceModel.find({}).lean();
 	res.json(experiences);
 });
