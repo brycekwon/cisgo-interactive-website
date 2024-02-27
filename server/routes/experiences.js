@@ -2,7 +2,7 @@
 
 import { Router } from 'express';
 
-import experienceModel from '../models/experienceModel.js';
+import experienceModel from '../models/experiences.js';
 
 const experiencesRouter = Router();
 
