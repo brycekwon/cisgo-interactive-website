@@ -10,8 +10,8 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/experiences`).then((res) => {
-      setExperiences(res.data);
+    fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
+      setExperiences(await res.json());
       setLoading(false);
     }).catch((err) => {
         console.log(err);
