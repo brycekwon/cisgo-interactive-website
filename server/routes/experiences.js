@@ -1,8 +1,10 @@
+"use strict";
+
 import { Router } from 'express';
 
 import experienceModel from '../models/experienceModel.js';
 
-let experiencesRouter = Router();
+const experiencesRouter = Router();
 
 experiencesRouter.get("/", async function (req, res) {
 	// TODO: GET /
