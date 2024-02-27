@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const experienceSchema = mongoose.Schema({
+const schema = mongoose.Schema({
     meta: {
 		isPublic: Boolean,
 		emailVisible: Boolean,
@@ -24,7 +24,7 @@ const experienceSchema = mongoose.Schema({
 		},
 		description: String,
 	},
-	images: {
+	images: { // maybe do this later
 		img1: {
 			data: Buffer,
 			contentType: String,
@@ -40,9 +40,8 @@ const experienceSchema = mongoose.Schema({
 	},
 })
 
-// TODO: Fix image field
 // TODO: Transition to using a user ID
 
-const experienceModel = mongoose.model('Experiences', experienceSchema);
+const model = mongoose.model('Experiences', schema);
 
-export default experienceModel;
+export default model;
