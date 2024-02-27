@@ -3,9 +3,8 @@ import { Router } from 'express';
 let router = Router();
 
 
-/* GET home page. */
+// Redirect people to the correct landing page
 let indexRouter = router.get("/", function (req, res) {
-	// res.sendStatus(200);
 	res.redirect(`http://${req.hostname}:3000/`);
 });
 
