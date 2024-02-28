@@ -11,7 +11,7 @@ const NavBar = () => {
   }
 
   return (
-    <ul className="opened">
+    <ul className="nav">
       <li className="expanded">
         <Link to="/">
           <i class="material-icons">home</i>
