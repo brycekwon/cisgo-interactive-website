@@ -1,4 +1,6 @@
 import React from 'react';
+import '../static/css/components/PopUp.css'; // Adjust the path based on your project structure
+
 const countryFlagUrls = {
     "Sweden": "https://www.worldometers.info/img/flags/sw-flag.gif",
     "Philippines": "https://www.worldometers.info/img/flags/small/tn_rp-flag.gif",

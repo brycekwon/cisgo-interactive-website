@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Popup from './Popup.js';
+import Popup from '../components/Popup.js';
 import NavBar from '../components/NavBar.js'; // Ensure NavBar import is correct
 import '../static/css/pages/Search.css';
 
