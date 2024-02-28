@@ -1,5 +1,5 @@
 
-div {
+.app {
   background-color: #579ee5;
 }
 
@@ -8,7 +8,7 @@ div {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 50px; /* Adjust as needed */
+  padding-top: 50px; /* Adjust as needed */
 }
 
 input {
