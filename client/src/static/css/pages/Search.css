@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 div {
   background-color: rgb(255, 255, 255);
 }
@@ -7,13 +8,101 @@ div {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 50px; /* Adjust as needed */
+}
+
+input {
+  padding: 10px;
+  border: 2px solid #edede0;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  width: 300px; /* Adjust as needed */
+  font-size: 16px;
+}
+
+input::placeholder {
+  color: #6c757d;
 }
 
 .box {
-  text-align: left;
-  border: black ridge 1px;
-  border-radius: 10px;
-  margin: 3px;
-  width: 50%;
-  padding-left: 10px;
+  background-color: #eeefe6;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 80%;
+  max-width: 600px; /* Adjust as needed */
+  display: flex; /* Make the box a flex container */
+  justify-content: space-between; /* Push items to the start and end of the container */
+  align-items: center; /* Center items along the cross axis */
+  cursor: pointer; /* Add cursor pointer to indicate clickability */
+}
+
+.country-flag-container {
+  margin-right: 20px; /* Add some space between the flag and the text */
+}
+
+.country-flag {
+  width: 65px; /* Adjust as needed */
+  height: auto; /* Let the height adjust proportionally */
+  object-fit: contain; /* This property ensures that the entire image fits inside the container */
+}
+
+.box p {
+  margin: 0;
+  font-size: 16px; /* Adjust as needed */
+}
+
+.box p:first-child {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.box p:last-child {
+  color: #6c757d;
+  font-size: 14px;
+}
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: #eeefe6;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 80%;
+  outline: 2px solid #1f73c7;
+  position: relative; /* Add position relative */
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Adjust to right */
+  font-size: 24px;
+  cursor: pointer;
+  color: #000000;
+}
+
+.popup-details {
+  display: flex;
+  align-items: flex-start; /* Adjust alignment */
+}
+
+.popup-info {
+  flex: 1; /* Occupy remaining space */
+}
+
+.popup-flag {
+  margin-left: 20px; /* Add margin for spacing */
 }
