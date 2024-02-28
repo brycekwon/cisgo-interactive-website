@@ -1,6 +1,6 @@
-/* NavBar.css */
-.navbar ul {
-    list-style-type: none; /* Remove bullet points */
+
+.nav {
+    list-style-type: none;
     margin: 0;
     padding: 0;
 }
