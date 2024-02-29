@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 
 import '../static/css/pages/Home.css';
@@ -9,21 +9,22 @@ const Home = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState([]);
   const [map, setMap] = useState(null)
+  const ourRef = useRef(null);
 
   // start of panning code
   const [pointerDown, setPointerDown] = useState(false);
-  const [pointerOrigin, setPointerOrigin] = useState({ x: 0, y: 0 });
-  const [viewBox, setViewBox] = useState({
+  const [scrolling, setScrolling] = useState(false);
+  
+  // coordinates of the mouse's position
+  const coords = useRef({
         x: 0,
         y: 0,
-        width: 2000, // You may replace this with the appropriate initial width
-        height: 857 // You may replace this with the appropriate initial height
+        scrollLeft: 0,
+        scrollTop: 0
     });
 
-  const [newViewBox, setNewViewBox] = useState({ x: 0, y: 0 });
-
   // returns a point (the coordinate of the user's click)
-  function getPoint(e) {
+  const getPoint = (e) => {
     const point = { x: 0, y: 0 }; // initial point
       // checks if user clicks the screen and gets coordinates
       if (e.targetTouches) {
@@ -38,45 +39,65 @@ const Home = () => {
   }
 
   // sets the position for when a user clicks the screen
-  function handleMouseDown(e) {
+  const handleMouseDown = (e) => {
+    
+      if (!ourRef.current) return
+      console.log(getPoint(e));
       const position = getPoint(e);
-      setPointerDown(true);
-      setPointerOrigin({ x: position.x, y: position.y });
-      document.body.style.cursor = "grabbing";
+      const startX = e.pageX - position.offsetLeft;
+      const startY = e.pageY - position.offsetTop;
+      const scrollX = position.scrollLeft;
+      const scrollY = position.scrollTop;
+      coords.current = { startX, startY, scrollX, scrollY }
+      setPointerDown(true)
+      document.body.style.cursor = "grabbing"
+      
+
   }
 
   // handles grabbing and scrolling events
-  function handleMouseMove(e) {
-      if (!pointerDown) return; // returns if the user isn't holding down on the screen
+  const handleMouseMove = (e) => {
+      if (!pointerDown || !ourRef.current) return; // returns if the user isn't holding down on the screen
       e.preventDefault(); // Prevents user from selecting something on the page
 
       // calculates and saves the new position
       const position = getPoint(e);
-      const newViewBoxX = viewBox.x - ((position.x - pointerOrigin.x) * 0.8);
-      const newViewBoxY = viewBox.y - ((position.y - pointerOrigin.y) * 0.8);
+      const startX = e.pageX - position.offsetLeft;
+      const startY = e.pageY - position.offsetTop;
+      const walkX = (startX - coords.current.startX) * 0.8;
+      const walkY = (startY - coords.current.startY) * 0.8;
+      position.scrollLeft = coords.current.scrollLeft - walkX;
+      position.scrollTop = coords.current.scrollTop - walkY;
 
-      // sets the new box with the new coordinates
-      setNewViewBox({ x: newViewBoxX, y: newViewBoxY });
-      // You should use state setter to update viewBox instead of direct mutation
-      setViewBox({x: newViewBoxX, y: newViewBoxY });
+      // // sets the new box with the new coordinates
+      // setNewViewBox({ x: newViewBoxX, y: newViewBoxY });
+      // // You should use state setter to update viewBox instead of direct mutation
+      // setViewBox({x: newViewBoxX, y: newViewBoxY });
+      document.body.style.cursor = "grabbing";
+      setScrolling(true)
+      console.log(position);
   }
 
   // resets cursor when the user unclicks
-  function handleMouseUp() {
-      setPointerDown(false);
+  const handleMouseUp = () => {
+      if (!ourRef.current) return
       document.body.style.cursor = "grab";
+      setPointerDown(false)
+      setScrolling(false)
 
-      viewBox.x = newViewBox.x;
-      viewBox.y = newViewBox.y;
+      // viewBox.x = newViewBox.x;
+      // viewBox.y = newViewBox.y;
   }
 
   // resets cursor when the mouse leaves a country
-  function handleMouseLeave() {
-      setPointerDown(false);
+  const handleMouseLeave = () => {
+      if (!ourRef.current) return
       document.body.style.cursor = "grab";
 
-      viewBox.x = newViewBox.x;
-      viewBox.y = newViewBox.y;
+      setPointerDown(false)
+      setScrolling(false)
+      // viewBox.x = newViewBox.x;
+      // viewBox.y = newViewBox.y;
   }
 
   useEffect(() => {
@@ -100,11 +121,9 @@ const Home = () => {
   return (
     <div>
       <NavBar />
-      <svg id="world_map" viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
-        onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseLeave}>
-          {map.render()}
-      </svg>
-      {map.render()}
+      <div ref={ourRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp}>
+        {map.render()}
+      </div>
     </div>
   );
 }
