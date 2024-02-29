@@ -10,18 +10,27 @@ const Home = () => {
   const [loading, setLoading] = useState([]);
   const [map, setMap] = useState(null)
   const ourRef = useRef(null);
-
-  // start of panning code
   const [pointerDown, setPointerDown] = useState(false);
-  const [scrolling, setScrolling] = useState(false);
   
   // coordinates of the mouse's position
   const coords = useRef({
         x: 0,
         y: 0,
-        scrollLeft: 0,
-        scrollTop: 0
     });
+
+  // view box position before scrolling
+  const oldViewBox = useRef({
+    x: 0,
+    y: 0,
+  });
+
+  // view box position after scrolling
+  const newViewBox = useRef({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0
+  });
 
   // returns a point (the coordinate of the user's click)
   const getPoint = (e) => {
@@ -40,19 +49,11 @@ const Home = () => {
 
   // sets the position for when a user clicks the screen
   const handleMouseDown = (e) => {
-    
       if (!ourRef.current) return
-      console.log(getPoint(e));
       const position = getPoint(e);
-      const startX = e.pageX - position.offsetLeft;
-      const startY = e.pageY - position.offsetTop;
-      const scrollX = position.scrollLeft;
-      const scrollY = position.scrollTop;
-      coords.current = { startX, startY, scrollX, scrollY }
+      coords.current = position;
       setPointerDown(true)
       document.body.style.cursor = "grabbing"
-      
-
   }
 
   // handles grabbing and scrolling events
@@ -62,20 +63,18 @@ const Home = () => {
 
       // calculates and saves the new position
       const position = getPoint(e);
-      const startX = e.pageX - position.offsetLeft;
-      const startY = e.pageY - position.offsetTop;
-      const walkX = (startX - coords.current.startX) * 0.8;
-      const walkY = (startY - coords.current.startY) * 0.8;
-      position.scrollLeft = coords.current.scrollLeft - walkX;
-      position.scrollTop = coords.current.scrollTop - walkY;
 
-      // // sets the new box with the new coordinates
-      // setNewViewBox({ x: newViewBoxX, y: newViewBoxY });
-      // // You should use state setter to update viewBox instead of direct mutation
-      // setViewBox({x: newViewBoxX, y: newViewBoxY });
+      // newViewBox object updated every mouse move
+      newViewBox.current = {
+        x: oldViewBox.current.x - ((position.x - coords.current.x) * 0.8),
+        y: oldViewBox.current.y - ((position.y - coords.current.y) * 0.8),
+        width: ourRef.current.getBoundingClientRect().width,
+        height: ourRef.current.getBoundingClientRect().height
+      }
+      
+      // sets new viewbox
+      setMap(map.setViewBox(`${newViewBox.current.x} ${newViewBox.current.y} ${newViewBox.current.width} ${newViewBox.current.height}`));
       document.body.style.cursor = "grabbing";
-      setScrolling(true)
-      console.log(position);
   }
 
   // resets cursor when the user unclicks
@@ -83,21 +82,17 @@ const Home = () => {
       if (!ourRef.current) return
       document.body.style.cursor = "grab";
       setPointerDown(false)
-      setScrolling(false)
-
-      // viewBox.x = newViewBox.x;
-      // viewBox.y = newViewBox.y;
+      oldViewBox.current.x = newViewBox.current.x;
+      oldViewBox.current.y = newViewBox.current.y;
   }
 
   // resets cursor when the mouse leaves a country
   const handleMouseLeave = () => {
       if (!ourRef.current) return
       document.body.style.cursor = "grab";
-
       setPointerDown(false)
-      setScrolling(false)
-      // viewBox.x = newViewBox.x;
-      // viewBox.y = newViewBox.y;
+      oldViewBox.current.x = newViewBox.current.x;
+      oldViewBox.current.y = newViewBox.current.y;
   }
 
   useEffect(() => {
@@ -109,7 +104,7 @@ const Home = () => {
         console.log(err);
         setLoading(false);
     });
-    setMap(new WorldMap());
+    setMap(new WorldMap(null));
   }, []);
 
   if (loading) {
