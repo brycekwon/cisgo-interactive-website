@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Popup from '../components/Popup.js';
 import NavBar from '../components/NavBar.js'; // Ensure NavBar import is correct
 import '../static/css/pages/Search.css';
@@ -12,12 +11,10 @@ const Search = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`${process.env.REACT_APP_API}/experiences`)
-      .then((res) => {
-        setExperiences(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
+    fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
+      setExperiences(await res.json());
+      setLoading(false);
+    }).catch((err) => {
         console.log(err);
         setLoading(false);
       });
@@ -84,7 +81,6 @@ const Search = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
   return (
     <div>
       <NavBar /> {/* Ensure NavBar is rendered */}
