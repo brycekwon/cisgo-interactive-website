@@ -1,26 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Popup from '../components/Popup.js';
-import NavBar from '../components/NavBar.js'; // Ensure NavBar import is correct
-import '../static/css/pages/Search.css';
+import React from 'react';
+import '../static/css/components/PopUp.css'; // Adjust the path based on your project structure
 
-const Search = () => {
-  const [query, setQuery] = useState("");
-  const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedExperience, setSelectedExperience] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
-      setExperiences(await res.json());
-      setLoading(false);
-    }).catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, []);
-
-  const countryFlagUrls = {
+const countryFlagUrls = {
     "Sweden": "https://www.worldometers.info/img/flags/sw-flag.gif",
     "Philippines": "https://www.worldometers.info/img/flags/small/tn_rp-flag.gif",
     "Canada": "https://www.worldometers.info/img/flags/small/tn_ca-flag.gif",
@@ -65,48 +46,40 @@ const Search = () => {
   };
 
   const getCountryFlagUrl = (countryName) => {
-    const trimmedCountryName = countryName.trim(); // Trim leading and trailing whitespace
+    const trimmedCountryName = countryName.trim();
     return countryFlagUrls[trimmedCountryName] || ''; 
   };
-
-  const openPopup = (experience) => {
-    console.log("Popup opened"); // Add this line to log a message when the popup is opened
-    setSelectedExperience(experience);
-  };
-
-  const closePopup = () => {
-    setSelectedExperience(null);
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  return (
-    <div>
-      <NavBar /> {/* Ensure NavBar is rendered */}
-      <div className="app">
-        <input placeholder='Search Location...' onChange={event => setQuery(event.target.value)}></input>
-        {experiences.filter(post => {
-          if (query === '') {
-            return post;
-          } else if (post.body.location.country.toLowerCase().includes(query.toLowerCase())) {
-            return post;
-          }
-        }).map((post, index) => (
-          <div className="box" key={index} onClick={() => openPopup(post)}>
-            <div>
-              <p>{post.name.firstName} {post.name.lastName} ({post.contact.email})</p>
-              <p>{post.body.location.country}{post.body.location.region === null ? "" : ", " + post.body.location.region}</p>
-            </div>
-            <div className="country-flag-container">
-              <img src={getCountryFlagUrl(post.body.location.country)} alt="Country Flag" className="country-flag" />
+  
+  const Popup = ({ isOpen, onClose, experience }) => {
+    if (!isOpen || !experience) return null;
+  
+    const { name, contact, body } = experience;
+  
+    return (
+      <div className="popup-overlay" onClick={onClose}>
+        <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+          <span className="popup-close" onClick={onClose}>X</span>
+          <h2>{name.firstName} {name.lastName}</h2>
+          <div className="popup-details">
+            <div className="popup-info">
+              <p>Email: {contact.email}</p>
+              <p>
+                Country: {body.location.country}
+                <img 
+                  src={getCountryFlagUrl(body.location.country)} 
+                  alt="Country Flag" 
+                  className="popup-flag" 
+                  style={{ width: '30px', height: 'auto' }} // Adjust size as needed
+                />
+              </p>
+              <p>Region: {body.location.region}</p>
+              <p>Description: {body.description}</p>
             </div>
           </div>
-        ))}
+        </div>
       </div>
-      <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
-    </div>
-  );
-}
-
-export default Search;
+    );
+  };
+  
+  
+  export default Popup;

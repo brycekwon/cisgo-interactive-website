@@ -25,9 +25,8 @@ const Home = () => {
 
   console.log(experiences)
 
-
   return (
-    <div>
+    <div className="body">
       <NavBar />
       <WorldMap />
     </div>
