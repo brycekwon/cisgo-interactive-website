@@ -1,11 +1,13 @@
-import express from 'express';
+"use strict";
 
-let router = express.Router();
+import { Router } from 'express';
+
+let router = Router();
 
 
-/* GET home page. */
+// Redirect people to the correct landing page
 let indexRouter = router.get("/", function (req, res) {
-  res.sendStatus(200);
+	res.redirect(`http://${req.hostname}:3000/`);
 });
 
 export default indexRouter;
