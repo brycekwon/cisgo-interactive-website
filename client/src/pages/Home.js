@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 import '../static/css/pages/Home.css';
 import WorldMap from '../components/WorldMap.js';
@@ -11,8 +10,8 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`${process.env.REACT_APP_API}/experiences`).then((res) => {
-      setExperiences(res.data);
+    fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
+      setExperiences(await res.json());
       setLoading(false);
     }).catch((err) => {
         console.log(err);
@@ -26,9 +25,8 @@ const Home = () => {
 
   console.log(experiences)
 
-
   return (
-    <div>
+    <div className="body">
       <NavBar />
       <WorldMap />
     </div>
