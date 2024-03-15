@@ -4,7 +4,13 @@ export async function searchExperience (req, res) {
 	// TODO: GET /
 	// Add support for querystring searching
 	// console.log(req.hostname);
-	const experiences = await experienceModel.find({}).lean();
+	const experiences = await experienceModel.find((req.query.location ? {$search: {
+		text: {
+			query: req.query.location,
+			path: "location",
+			fuzzy: {}
+		}
+	}} : {})).lean();
 	res.json(experiences);
 }
 
