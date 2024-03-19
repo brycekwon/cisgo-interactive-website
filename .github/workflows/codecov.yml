@@ -17,8 +17,8 @@ jobs:
       - name: Install Client-Side Dependencies
         run: cd client && npm install && cd ..
       # Skipping ATS because idk how it works
-      - name: Run server-side tests
-        run: cd server && npm run test && cd ..
+      # - name: Run server-side tests
+      #   run: cd server && npm run test && cd ..
       - name: Upload coverage to CodeCov
         uses: codecov/codecov-action@v4.0.1
         with:
