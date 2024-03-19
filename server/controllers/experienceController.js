@@ -1,5 +1,10 @@
 import experienceModel from '../models/experienceModel.js';
 
+/**
+ * Searches the experience database. Optionally narrows search by location.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ */
 export async function searchExperience (req, res) {
 	// TODO: GET /
 	// Add support for querystring searching
