@@ -1,1 +1,1 @@
-it('is a test', () => {expect(1).toEqual(1);})
+it('is a test', () => {});
