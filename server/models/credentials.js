@@ -7,6 +7,6 @@ const schema = Schema({
 	password: String, // base-16 hash
 });
 
-const authModel = model('Auth', schema);
+const authModel = model('credentials', schema);
 
 export default authModel;
