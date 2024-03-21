@@ -1,5 +1,6 @@
 body{
     background-color: rgb(30,22,86);
+    cursor: auto;
 }
 
 h1{
@@ -8,9 +9,10 @@ h1{
     text-align: center;
     text-decoration: underline;
     color: white;
+    cursor: auto;
 }
 
-input{
+#email, #password{
     margin-top: 5%;
     margin-bottom: 5%;
     padding: 15px 15px;
@@ -18,9 +20,10 @@ input{
     position: relative;
     top: 75px;
     width: 50%;
+    cursor: auto;
 }
 
-button{
+#login-button{
     font-size: 20px;
     width: 50%;
     text-align: center;
@@ -36,7 +39,7 @@ button{
     transition: opacity 0.5s;
 }
 
-button:hover{
+#login-button:hover{
     cursor: pointer;
     opacity: 1;
 }
@@ -48,4 +51,5 @@ button:hover{
     margin-right: 30%;
     margin-left: 30%;
     box-shadow: 0px 5px 20px black;
+    cursor: auto;
 }

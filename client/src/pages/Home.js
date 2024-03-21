@@ -20,6 +20,7 @@ const Home = () => {
         country.forEach(function(item){
             item.style.fill = "rgb(34, 59, 5)";
             item.style.transition = "0.2s";
+            item.style.cursor = "pointer";
         })
     }
     // event listeners for hovering over countries
@@ -32,6 +33,7 @@ const Home = () => {
             item.style.stroke = "rgb(34, 59, 5)"
             item.style.strokeWidth = "1";
             item.style.transition = "0.2s";
+            item.style.cursor = "grab";
         })
     }
 

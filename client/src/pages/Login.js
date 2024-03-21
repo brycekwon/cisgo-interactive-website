@@ -38,15 +38,15 @@ const Login = () => {
   }
 
   return (
-    <div classname="login_container">
-      <h1 classname="login_header">Welcome Back!</h1>
-      <body classname="login_body">
+    <div id="container" class="login-container">
+      <h1>Welcome Back!</h1>
+      <body>
         <form onSubmit={handleLogin} method="get" id="login-form">
           <input type="email" id="email" name="email" placeholder="Email" required></input>
           <br />
           <input type="password" id="password" name="password" placeholder="Password" required></input>
           <br />
-          <button type="submit">Log In</button>
+          <button type="submit" id="login-button">Log In</button>
         </form>
       </body>
     </div>
