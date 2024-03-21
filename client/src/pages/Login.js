@@ -30,12 +30,12 @@ const Login = () => {
         return res.json();
       })
       .then(data => {
-		if (data.valid) {
-      navigate("/admin");
-			// const el = document.createElement("a");
-			// el.setAttribute("href", '/admin');
-			// el.click(); // go to admin panel lol
-		}
+        if (data.valid) {
+          navigate("/admin");
+          // const el = document.createElement("a");
+          // el.setAttribute("href", '/admin');
+          // el.click(); // go to admin panel lol
+        }
       })
       .catch(err => {
         console.log(err);
