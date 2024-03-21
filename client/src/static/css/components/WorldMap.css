@@ -9,4 +9,8 @@
     stroke-width: 1;
   }
 
+  svg path:hover{
+    cursor: pointer;
+  }
+
 }

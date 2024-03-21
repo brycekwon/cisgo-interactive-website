@@ -19,7 +19,6 @@ const Home = () => {
         // changes country color if hovering
         country.forEach(function(item){
             item.style.fill = "rgb(34, 59, 5)";
-            item.style.cursor = "pointer";
             item.style.transition = "0.2s";
         })
     }
@@ -32,7 +31,6 @@ const Home = () => {
             item.style.fill = "rgb(56, 78, 29)";
             item.style.stroke = "rgb(34, 59, 5)"
             item.style.strokeWidth = "1";
-            item.style.cursor = "auto";
             item.style.transition = "0.2s";
         })
     }
