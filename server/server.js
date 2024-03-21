@@ -5,11 +5,11 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import 'dotenv/config';
+import 'dotenv/config.js';
 
-import indexRouter from './routes/index';
-import experiencesRouter from './routes/experiences';
-import authRouter from './routes/auth';
+import indexRouter from './routes/index.js';
+import experiencesRouter from './routes/experiencesRoutes.js';
+import authRouter from './routes/authRoutes.js';
 
 const app = express();
 

@@ -6,19 +6,21 @@
 	"extends": [
 		"airbnb-base",
 		"eslint:recommended",
+    "plugin:import/recommended",
 		"plugin:node/recommended",
 		"plugin:prettier/recommended",
-		"prettier"
-	],
-	"parserOptions": {
-		"ecmaVersion": 12
-	},
-	"plugins": ["prettier"],
-	"rules": {
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "import/extensions": [0, { ".js": "always" }],
     "indent": ["error", 2],
-		"consistent-return": "off",
-		"no-console": "off",
-		"no-plusplus": [
+    "consistent-return": "off",
+    "no-console": "off",
+    "no-plusplus": [
 			"warn",
 			{
 				"allowForLoopAfterthoughts": true

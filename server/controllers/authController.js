@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-import authModel from '../models/credentialsModel';
+import authModel from '../models/credentialsModel.js';
 
 /**
  *
