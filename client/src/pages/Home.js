@@ -10,6 +10,37 @@ const Home = () => {
   const [map, setMap] = useState(null)
   const ourRef = useRef(null);
   const [pointerDown, setPointerDown] = useState(false);
+  document.querySelectorAll(".allPaths").forEach(e=>{
+    
+    var country = document.getElementsByName(e.getAttribute('name'));
+
+    // function to detect if a user is hovering over a country
+    function hovering(){
+        // changes country color if hovering
+        country.forEach(function(item){
+            item.style.fill = "rgb(34, 59, 5)";
+            item.style.cursor = "pointer";
+            item.style.transition = "0.2s";
+        })
+    }
+    // event listeners for hovering over countries
+    e.addEventListener("mouseover", hovering);
+
+    // resets country color after no longer hovering
+    function out(){
+        country.forEach(function(item){
+            item.style.fill = "rgb(56, 78, 29)";
+            item.style.stroke = "rgb(34, 59, 5)"
+            item.style.strokeWidth = "1";
+            item.style.cursor = "auto";
+            item.style.transition = "0.2s";
+        })
+    }
+
+    // event listener when user stops hovering over a country
+    e.addEventListener("mouseout", out);
+
+})
   
   // coordinates of the mouse's position
   const coords = useRef({
