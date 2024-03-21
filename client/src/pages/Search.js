@@ -8,17 +8,18 @@ const Search = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState(null);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
-      setExperiences(await res.json());
-      setLoading(false);
-    }).catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, []);
+//   useEffect(() => {
+//     setLoading(true);
+//     fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
+//       setExperiences(await res.json());
+//       setLoading(false);
+//     }).catch((err) => {
+//         console.log(err);
+//         setLoading(false);
+//       });
+//   }, []);
 
   const countryFlagUrls = {
     "Sweden": "https://www.worldometers.info/img/flags/sw-flag.gif",
@@ -78,21 +79,63 @@ const Search = () => {
     setSelectedExperience(null);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
+//   useEffect(() => {
+//     setLoading(true);
+//     fetch(`${process.env.REACT_APP_API}/experiences`).then(async (res) => {
+//       setExperiences(await res.json());
+//       setLoading(false);
+//     }).catch((err) => {
+//         console.log(err);
+//         setLoading(false);
+//       });
+//   }, []);
+
+  const handleSearch = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+		setLoading(true);
+        await fetch(`${process.env.REACT_APP_API}/experiences`, {
+            method: "post",
+            body: JSON.stringify({
+                "query": formData.get("query"),
+            }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+        }).then(async (res) => {
+			let data = await res.json();
+			setExperiences(data);
+			setLoading(false);
+		}).catch((err) => {
+			console.log(err);
+			setError(err);
+			setLoading(false);
+		});
   }
+
+  if (loading) {
+    return <div>
+		<NavBar />
+		<div className="app">
+			<h1>Loading...</h1>
+		</div>
+	</div>;
+  }
+
+  if (error) {
+	return <div>{error}</div>;
+  }
+    
   return (
     <div>
-      <NavBar /> {/* Ensure NavBar is rendered */}
+      <NavBar />
+
       <div className="app">
-        <input placeholder='Search Location...' onChange={event => setQuery(event.target.value)}></input>
-        {experiences.filter(post => {
-          if (query === '') {
-            return post;
-          } else if (post.body.location.country.toLowerCase().includes(query.toLowerCase())) {
-            return post;
-          }
-        }).map((post, index) => (
+        <form onSubmit={handleSearch}>
+          <input name="query" placeholder='Search Location...'></input>
+          <button type='submit'>Submit</button>
+        </form>
+		{experiences.map((post, index) => (
           <div className="box" key={index} onClick={() => openPopup(post)}>
             <div>
               <p>{post.name.firstName} {post.name.lastName} ({post.contact.email})</p>
@@ -105,8 +148,35 @@ const Search = () => {
         ))}
       </div>
       <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
-    </div>
-  );
+      </div>
+  )
+
+  // return (
+  //   <div>
+  //     <NavBar /> {/* Ensure NavBar is rendered */}
+  //     <div className="app">
+  //       <input placeholder='Search Location...' onChange={event => setQuery(event.target.value)}></input>
+    //     {experiences.filter(post => {
+    //       if (query === '') {
+    //         return post;
+    //       } else if (post.body.location.country.toLowerCase().includes(query.toLowerCase())) {
+    //         return post;
+    //       }
+    //     }).map((post, index) => (
+    //       <div className="box" key={index} onClick={() => openPopup(post)}>
+    //         <div>
+    //           <p>{post.name.firstName} {post.name.lastName} ({post.contact.email})</p>
+    //           <p>{post.body.location.country}{post.body.location.region === null ? "" : ", " + post.body.location.region}</p>
+    //         </div>
+    //         <div className="country-flag-container">
+    //           <img src={getCountryFlagUrl(post.body.location.country)} alt="Country Flag" className="country-flag" />
+    //         </div>
+    //       </div>
+    //     ))}
+    //   </div>
+    //   <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
+  //   </div>
+  // );
 }
 
 export default Search;
