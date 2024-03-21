@@ -6,10 +6,12 @@ import * as controller from "../controllers/experienceController.js";
 
 const experiencesRouter = Router();
 
-experiencesRouter.get("/", controller.searchExperience);
-experiencesRouter.get("/:id", controller.searchExperienceById);
 
-experiencesRouter.post("/", controller.addExperience);
-experiencesRouter.post("/:id", controller.editExperience);
+experiencesRouter.get("/", controller.getExperiences);
+experiencesRouter.get("/:id", controller.searchExperienceById);
+experiencesRouter.post("/", controller.searchExperienceByParams)
+
+experiencesRouter.post("/new", controller.addExperience);
+experiencesRouter.post("/edit/:id", controller.editExperience);
 
 export default experiencesRouter;

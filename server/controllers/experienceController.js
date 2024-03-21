@@ -1,21 +1,32 @@
 import experienceModel from '../models/experienceModel.js';
 
+export async function getExperiences(req, res) {
+	const experiences = await experienceModel.find({}).lean();
+	res.json(experiences);
+}
+
 /**
  * Searches the experience database. Optionally narrows search by location.
  * @param {Express.Request} req 
  * @param {Express.Response} res 
  */
-export async function searchExperience (req, res) {
+export async function searchExperienceByParams (req, res) {
 	// TODO: GET /
 	// Add support for querystring searching
 	// console.log(req.hostname);
-	const experiences = await experienceModel.find((req.query.location ? {$search: {
-		text: {
-			query: req.query.location,
-			path: "location",
-			fuzzy: {}
-		}
-	}} : {})).lean();
+	console.log(req.body);
+	
+	// const experiences = await (req.body.query
+	// 	? experienceModel.find({location: req.body.query})
+	// 	: experienceModel.find({})
+	// );
+	let experiences;
+	if (!req.body.query) {
+		experiences = await experienceModel.find({}).lean();
+	} else {
+		experiences = await experienceModel.find({"body.location.country": new RegExp(req.body.query, "i")});
+	}
+	console.log(experiences);
 	res.json(experiences);
 }
 
