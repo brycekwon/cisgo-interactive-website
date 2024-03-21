@@ -30,10 +30,15 @@ const Login = () => {
         return res.json();
       })
       .then(data => {
-        console.log(data)
+        console.log(data);
+		if (data.valid) {
+			const el = document.createElement("a");
+			el.setAttribute("href", '/admin');
+			el.click(); // go to admin panel lol
+		}
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       })
   }
 
