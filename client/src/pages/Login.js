@@ -1,8 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import '../static/css/pages/Login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -10,8 +12,6 @@ const Login = () => {
 
     const email = formData.get("email");
     const password = formData.get("password");
-
-    console.log(`EMAIL: ${email}\tPASSWORD: ${password}`);
 
     fetch(`${process.env.REACT_APP_API}/auth/login`, {
       method: "post",   // prevent caching or logs of credentials
@@ -30,11 +30,11 @@ const Login = () => {
         return res.json();
       })
       .then(data => {
-        console.log(data);
 		if (data.valid) {
-			const el = document.createElement("a");
-			el.setAttribute("href", '/admin');
-			el.click(); // go to admin panel lol
+      navigate("/admin");
+			// const el = document.createElement("a");
+			// el.setAttribute("href", '/admin');
+			// el.click(); // go to admin panel lol
 		}
       })
       .catch(err => {
