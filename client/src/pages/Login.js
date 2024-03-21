@@ -42,9 +42,9 @@ const Login = () => {
       <h1 classname="login_header">Welcome Back!</h1>
       <body classname="login_body">
         <form onSubmit={handleLogin} method="get" id="login-form">
-          <input type="text" id="email" name="email" placeholder="Email" required></input>
+          <input type="email" id="email" name="email" placeholder="Email" required></input>
           <br />
-          <input type="text" id="password" name="password" placeholder="Password" required></input>
+          <input type="password" id="password" name="password" placeholder="Password" required></input>
           <br />
           <button type="submit">Log In</button>
         </form>
@@ -54,3 +54,4 @@ const Login = () => {
 }
 
 export default Login;
+
