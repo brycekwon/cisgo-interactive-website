@@ -1,4 +1,4 @@
-import authModel from "../models/credentials.js";
+import authModel from "../models/credentialsModel.js";
 import bcrypt from 'bcryptjs';
 
 /**

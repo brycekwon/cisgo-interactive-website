@@ -15,11 +15,8 @@ const About = lazy(() => import('./pages/About.js'));
 const Help = lazy(() => import('./pages/Help.js'));
 
 const Login = lazy(() => import('./pages/Login.js'));
-const AdminBoard = lazy(() => import('./pages/AdminBoard.js'));
+const Admin = lazy(() => import('./pages/Admin.js'));
 
-
-const Success = lazy(() => import('./pages/Success.js'));
-const Error = lazy(() => import('./pages/Error.js'));
 const NotFound = lazy(() => import('./pages/NotFound.js'));
 
 const App = () => {
@@ -34,9 +31,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/help" element={<Help />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminBoard />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/error" element={<Error />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

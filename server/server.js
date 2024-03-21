@@ -26,11 +26,8 @@ app.use("/", indexRouter);
 app.use("/experiences", experiencesRouter);
 app.use("/auth", authRouter);
 
-
-// --------------------------------------------------------------------------------------
-
 // catch favicon.ico
-app.use(function (req, res, next) {
+app.use(function (req, res) {
 if (req.originalUrl && req.originalUrl.split("/").pop() === "favicon.ico") {
 		return res.sendStatus(204);
 	}
