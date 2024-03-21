@@ -10,8 +10,6 @@
   }
 
   svg path:hover{
-    fill: rgb(34, 59, 5);
-    transition: 0.3s;
     cursor: pointer;
   }
 
