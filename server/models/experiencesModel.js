@@ -43,6 +43,6 @@ const schema = mongoose.Schema({
 
 // TODO: Transition to using a user ID
 
-const model = mongoose.model('Experiences', schema);
+const model = mongoose.model('experiences', schema);
 
 export default model;

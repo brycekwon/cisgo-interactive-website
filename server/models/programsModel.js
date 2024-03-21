@@ -6,6 +6,6 @@ const schema = Schema({
   website: String,
 });
 
-const programModel = model('Programs', schema);
+const programModel = model('programs', schema);
 
 export default programModel;

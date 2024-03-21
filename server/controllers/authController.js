@@ -20,7 +20,7 @@ export async function tryLogin(req, res) {
     });
   }
 
-  bcrypt.compare(req.body.password, credentials[0].password, function(err, result) {
+  bcrypt.compare(req.body.password, credentials[0].password, (err, result) => {
     if (err) {
       res.send(err);
       return;
@@ -28,7 +28,6 @@ export async function tryLogin(req, res) {
 
     if (result) {
       res.status(200).json({ valid: true });
-      // res.redirect(`http://${req.hostname}:3000/admin`);
     } else {
       res.status(401).json({
         valid: false,
@@ -43,4 +42,6 @@ export async function tryLogin(req, res) {
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export async function tryLogout(req, res) {}
+export async function tryLogout(req, res) {
+  res.status(204);
+}

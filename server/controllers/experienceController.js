@@ -14,7 +14,6 @@ export async function searchExperienceByParams(req, res) {
   // TODO: GET /
   // Add support for querystring searching
   // console.log(req.hostname);
-  console.log(req.body);
 
   // const experiences = await (req.body.query
   // 	? experienceModel.find({location: req.body.query})
@@ -28,7 +27,6 @@ export async function searchExperienceByParams(req, res) {
       'body.location.country': new RegExp(req.body.query, 'i'),
     });
   }
-  console.log(experiences);
   res.json(experiences);
 }
 

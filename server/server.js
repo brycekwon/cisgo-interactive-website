@@ -7,9 +7,8 @@ import cors from 'cors';
 
 import 'dotenv/config.js';
 
-import indexRouter from './routes/index.js';
-import experiencesRouter from './routes/experiencesRoutes.js';
 import authRouter from './routes/authRoutes.js';
+import experiencesRouter from './routes/experiencesRoutes.js';
 
 const app = express();
 
@@ -20,24 +19,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/experiences', experiencesRouter);
 app.use('/auth', authRouter);
+app.use('/experiences', experiencesRouter);
 
 // catch favicon.ico
-app.use(function (req, res) {
+app.use((req, res) => {
   if (req.originalUrl && req.originalUrl.split('/').pop() === 'favicon.ico') {
     return res.sendStatus(204);
   }
 });
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((_req, _res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, _next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
