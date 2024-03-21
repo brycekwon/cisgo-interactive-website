@@ -15,6 +15,8 @@ const About = lazy(() => import('./pages/About.js'));
 const Help = lazy(() => import('./pages/Help.js'));
 
 const Login = lazy(() => import('./pages/Login.js'));
+const AdminBoard = lazy(() => import('./pages/AdminBoard.js'));
+
 
 const Success = lazy(() => import('./pages/Success.js'));
 const Error = lazy(() => import('./pages/Error.js'));
@@ -32,6 +34,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/help" element={<Help />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminBoard />} />
           <Route path="/success" element={<Success />} />
           <Route path="/error" element={<Error />} />
           <Route path="*" element={<NotFound />} />

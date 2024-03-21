@@ -1,4 +1,7 @@
 .world_map {
+  background-color: rgb(0, 51, 102);
+  height: 100vh;
+  overflow: auto;
 
   svg path {
     fill: rgb(56, 78, 29);
@@ -12,9 +15,4 @@
     cursor: pointer;
   }
 
-  background-color: rgb(0, 51, 102);
-  display: block;
-
-  height: 900px;
-  width: 2000px;
 }
