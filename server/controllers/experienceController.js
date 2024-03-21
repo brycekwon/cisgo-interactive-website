@@ -1,4 +1,4 @@
-import experienceModel from '../models/experienceModel.js';
+import experienceModel from '../models/experiences.js';
 
 export async function getExperiences(req, res) {
 	const experiences = await experienceModel.find({}).lean();

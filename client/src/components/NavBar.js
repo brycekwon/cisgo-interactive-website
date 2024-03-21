@@ -24,7 +24,7 @@ const NavBar = () => {
             </Link>
           </li>
           <li className="expanded">
-            <Link to="/add">
+            <Link to="/login">
               <i className="material-icons">location_on</i>
               Add a Pin
             </Link>
