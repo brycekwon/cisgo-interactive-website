@@ -11,6 +11,7 @@ import 'dotenv/config.js';
 
 import indexRouter from './routes/index.js';
 import experiencesRouter from './routes/experiences.js';
+import authRouter from './routes/auth.js'
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use("/", indexRouter);
 app.use("/experiences", experiencesRouter);
+app.use("/auth", authRouter);
 
 // catch favicon.ico
 app.use(function (req, res, next) {
