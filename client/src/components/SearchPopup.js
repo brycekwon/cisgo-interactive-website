@@ -2,14 +2,14 @@ import React from 'react';
 
 import countryFlags from '../data/countryFlags.js';
 
-import '../static/css/components/PopUp.css';
+import '../static/css/components/SearchPopup.css';
 
 const getCountryFlagUrl = (countryName) => {
   const trimmedCountryName = countryName.trim();
   return countryFlags[trimmedCountryName] || ''; 
 };
 
-const Popup = ({ isOpen, onClose, experience }) => {
+const SearchPopup = ({ isOpen, onClose, experience }) => {
   if (!isOpen || !experience) return null;
 
   const { name, contact, body } = experience;
@@ -40,4 +40,4 @@ const Popup = ({ isOpen, onClose, experience }) => {
   );
 };
 
-export default Popup;
+export default SearchPopup;

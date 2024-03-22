@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import Popup from '../components/Popup.js';
 import NavBar from '../components/NavBar.js';
+import Popup from '../components/SearchPopup.js';
 import countryFlags from '../data/countryFlags.js';
 
 import '../static/css/pages/Search.css';

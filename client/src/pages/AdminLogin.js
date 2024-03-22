@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../static/css/pages/Login.css';
+import '../static/css/pages/AdminLogin.css';
 
-const Login = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -58,5 +58,5 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default AdminLogin;
 
