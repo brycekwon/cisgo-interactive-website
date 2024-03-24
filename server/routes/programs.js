@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import programModel from '../models/programsModel.js';
+import programModel from '../models/programs.js';
 
 const programRouter = Router();
 

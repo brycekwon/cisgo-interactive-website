@@ -1,4 +1,4 @@
-import experienceModel from '../models/experiencesModel.js';
+import experienceModel from '../models/experiences.js';
 
 export async function getExperiences(req, res) {
   const experiences = await experienceModel.find({}).lean();
@@ -24,7 +24,7 @@ export async function searchExperienceByParams(req, res) {
     experiences = await experienceModel.find({}).lean();
   } else {
     experiences = await experienceModel.find({
-      'body.location.country': new RegExp(req.body.query, 'i'),
+      'location.country': new RegExp(req.body.query, 'i'),
     });
   }
   res.json(experiences);
