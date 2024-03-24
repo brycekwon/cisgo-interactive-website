@@ -73,11 +73,11 @@ const Search = () => {
         {experiences.map((post, index) => (
           <div className="box" key={index} onClick={() => openPopup(post)}>
             <div>
-              <p>{post.name.firstName} {post.name.lastName} ({post.contact.email})</p>
-              <p>{post.body.location.country}{post.body.location.region === null ? "" : ", " + post.body.location.region}</p>
+              <p>{post.name.first} {post.name.last} ({post.contact.email})</p>
+              <p>{post.location.country}{post.location.region === null ? "" : ", " + post.location.region}</p>
             </div>
             <div className="country-flag-container">
-              <img src={getCountryFlag(post.body.location.country)} alt="Country Flag" className="country-flag" />
+              <img src={getCountryFlag(post.location.country)} alt="Country Flag" className="country-flag" />
             </div>
           </div>
         ))}
