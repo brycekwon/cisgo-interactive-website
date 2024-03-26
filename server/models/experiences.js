@@ -1,49 +1,34 @@
-"use strict";
-
 import mongoose from 'mongoose';
 
 const schema = mongoose.Schema({
-    meta: {
-		isPublic: Boolean,
-		emailVisible: Boolean,
-    },
-    name: {
-		firstName: String,
-		lastName: String,
-    },
-    contact: {
-		email: String,
-	},
-    body: {
-		program: String,
-		location: {
-			country: String,
-			region: String,
-		},
-		duration: {
-			startTime: Date,
-			endTime: Date,
-		},
-		description: String,
-	},
-	images: { // maybe do this later
-		img1: {
-			data: Buffer,
-			contentType: String,
-		},
-		img2: {
-			data: Buffer,
-			contentType: String,
-		},
-		img3: {
-			data: Buffer,
-			contentType: String,
-		},
-	},
-})
+  meta: {
+    isPublic: Boolean,
+    emailVisible: Boolean,
+  },
+  name: {
+    first: String,
+    last: String,
+  },
+  affiliation: {
+    position: String,
+    department: String,
+  },
+  contact: {
+    email: String,
+    website: String,
+  },
+  location: {
+    country: String,
+    region: String,
+  },
+  duration: {
+    startTime: Date,
+    endTime: Date,
+  },
+  program: String,
+  description: String,
+});
 
-// TODO: Transition to using a user ID
-
-const model = mongoose.model('Experiences', schema);
+const model = mongoose.model('experiences', schema);
 
 export default model;

@@ -1,0 +1,58 @@
+{
+	"env": {
+        "es6": true,
+		"node": true
+	},
+	"extends": [
+		"airbnb-base",
+		"eslint:recommended",
+    "plugin:import/recommended",
+		"plugin:node/recommended",
+		"plugin:prettier/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "import/extensions": [0, { ".js": "always" }],
+    "indent": ["error", 2],
+    "consistent-return": "off",
+    "no-console": "off",
+    "no-plusplus": [
+			"warn",
+			{
+				"allowForLoopAfterthoughts": true
+			}
+		],
+		"no-underscore-dangle": [
+			"warn",
+			{
+				"allow": ["_id"]
+			}
+		],
+		"no-unused-expressions": [
+			"warn",
+			{
+				"allowTernary": true
+			}
+		],
+		"no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+		"no-use-before-define": [
+			"error",
+			{
+				"functions": false
+			}
+		],
+		"prefer-template": "off",
+		"prettier/prettier": ["warn"]
+	}
+}

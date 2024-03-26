@@ -1,14 +1,10 @@
-"use strict";
-
 import { Router } from 'express';
 
-import * as controller from "../controllers/auth.js";
+import * as controller from '../controllers/auth.js';
 
 const authRouter = Router();
 
-authRouter.post("/login", controller.try_login);
-
-authRouter.post("/logout", controller.try_logout); // TODO
+authRouter.post('/login', controller.tryLogin);
+authRouter.post('/logout', controller.tryLogout); // TODO
 
 export default authRouter;
-

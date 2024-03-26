@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./static/css/global.css"
 
@@ -14,16 +13,13 @@ const Contact = lazy(() => import('./pages/Contact.js'));
 const About = lazy(() => import('./pages/About.js'));
 const Help = lazy(() => import('./pages/Help.js'));
 
-const Login = lazy(() => import('./pages/Login.js'));
-const AdminBoard = lazy(() => import('./pages/AdminBoard.js'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin.js'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard.js'));
 
-
-const Success = lazy(() => import('./pages/Success.js'));
-const Error = lazy(() => import('./pages/Error.js'));
 const NotFound = lazy(() => import('./pages/NotFound.js'));
 
 const App = () => {
-  return (
+  return(
     <BrowserRouter>
       <Suspense fallback={<Main />}>
         <Routes>
@@ -33,10 +29,8 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/help" element={<Help />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminBoard />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/error" element={<Error />} />
+          <Route path="/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

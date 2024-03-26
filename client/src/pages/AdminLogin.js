@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import '../static/css/pages/Login.css';
+import '../static/css/pages/AdminLogin.css';
 
-const Login = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
@@ -30,12 +30,12 @@ const Login = () => {
         return res.json();
       })
       .then(data => {
-		if (data.valid) {
-      navigate("/admin");
-			// const el = document.createElement("a");
-			// el.setAttribute("href", '/admin');
-			// el.click(); // go to admin panel lol
-		}
+        if (data.valid) {
+          navigate("/admin");
+          // const el = document.createElement("a");
+          // el.setAttribute("href", '/admin');
+          // el.click(); // go to admin panel lol
+        }
       })
       .catch(err => {
         console.log(err);
@@ -58,5 +58,5 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default AdminLogin;
 

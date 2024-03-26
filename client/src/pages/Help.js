@@ -3,9 +3,6 @@ import React from 'react';
 import '../static/css/pages/Help.css';
 
 const Help = () => {
- const [, updateState] = React.useState();
- const forceUpdate = React.useCallback(() => updateState({}), []);
-
   return (
     <div>
       <header className="title-header">

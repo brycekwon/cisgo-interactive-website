@@ -1,13 +1,11 @@
-"use strict";
-
-import {Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const schema = Schema({
-	countries: [String],
-	description: String,
-	website: String,
+  countries: [String],
+  description: String,
+  website: String,
 });
 
-const programModel = model('Programs', schema);
+const programModel = model('programs', schema);
 
 export default programModel;
