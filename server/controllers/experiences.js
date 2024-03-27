@@ -24,7 +24,7 @@ export async function searchExperienceByParams(req, res) {
     experiences = await experienceModel.find({}).lean();
   } else {
     experiences = await experienceModel.find({
-      'location.country': new RegExp(req.body.query.slice(100).match(/[ a-zA-Z0-9]+/)[0], 'i'),
+      'location.country': new RegExp(req.body.query.slice(100).match(/[ a-zA-Z0-9\-\.]+/)[0], 'i'),
     });
   }
   res.json(experiences);
