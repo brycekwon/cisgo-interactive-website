@@ -1,8 +1,18 @@
 import jwt from 'jsonwebtoken';
 
-export function createSecretToken(id) {
-  return (jwt.sign({ id }), process.env.TOKEN_KEY, {
-    expiresIn: 3 * 24 * 60 * 60 // 3 days
-  });
+
+export function createAccessToken(user) {
+  return jwt.sign(
+    { 'username': user.username },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '1m' },
+  )
 }
 
+export function createRefreshToken(user) {
+  return jwt.sign(
+    { 'username': user.username },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '1d' },
+  )
+}

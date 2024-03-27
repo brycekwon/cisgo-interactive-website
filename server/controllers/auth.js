@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import { createSecretToken } from '../util/secretToken.js';
 import authModel from '../models/credentials.js';
+import { createAccessToken, createRefreshToken } from '../util/secretToken.js';
 
 /**
  *
@@ -10,46 +10,30 @@ import authModel from '../models/credentials.js';
  * @param {Express.Response} res
  */
 export async function tryLogin(req, res) {
-  const { email, password } = req.body;
-  if (email == undefined || password == undefined) {
+  const { username, password } = req.body;
+  if (username == undefined || password == undefined) {
     return res.status(400).json({
       message: "All fields are required",
     });
   }
-  
+
   try {
-    const user = await authModel.findOne({ email: email });
+    const user = await authModel.findOne({ username: username });
     if (!user) {
       return res.status(401).json({
         message: "User not found",
       });
     }
 
-    const auth = await bcrypt.compare(password, user.password)
-    if (!auth) {
+    const isAdmin = await bcrypt.compare(password, user.password)
+    if (!isAdmin) {
       return res.status(400).json({
         message: "Invalid email or password",
       });
     }
 
-    const accessToken = jwt.sign(
-      {
-        'UserInfo': {
-          'username': user.email,
-        }
-      },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '10s' },
-    )
-
-    const refreshToken = jwt.sign(
-      {
-        'username': user.email,
-      },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '1d' },
-    )
-
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,     // accessible only by web server
@@ -57,12 +41,11 @@ export async function tryLogin(req, res) {
       maxAge: 1 * 24 * 60 * 60 * 1000   // cookie expiry: set to match refresh token time
     })
 
-
     res.status(200).json({
       accessToken
     })
 
-  } catch (err) {
+  } catch (err) { // TODO: maybe build custom error handler?
     console.log(err)
   }
 }
@@ -85,22 +68,14 @@ export async function refresh(req, res) {
         message: 'Forbidden',
       })
 
-      const valid = await authModel.findOne({ email: decoded.username });
-      if (!valid) {
+      const user = await authModel.findOne({ username: decoded.username });
+      if (!user) {
         return res.status(401).json({
           message: 'Unauthorized',
         })
       }
 
-      const accessToken = jwt.sign(
-        {
-          'UserInfo': {
-            'username': valid.email,
-          }
-        },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '10s' },
-      )
+      const accessToken = createAccessToken(user);
       res.json({ accessToken });
     }
   )
@@ -111,9 +86,9 @@ export async function refresh(req, res) {
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export async function tryLogout(req, res) {
+export function tryLogout(req, res) {
   const cookies = req.cookies;
-  if (!cookies?.jwt) return res.status(204);
+  if (!cookies?.jwt) return res.status(204);  // BUG: hangs if cleared without cookies
 
   res.clearCookie('jwt', { httpOnly: true, secure: true })
   res.json({ message: 'Cookie cleared' })
