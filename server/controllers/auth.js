@@ -32,8 +32,8 @@ export async function tryLogin(req, res) {
       });
     }
 
-    const accessToken = createAccessToken(user);
-    const refreshToken = createRefreshToken(user);
+    const accessToken = createAccessToken(user, '2m');
+    const refreshToken = createRefreshToken(user, '1d');
 
     res.cookie('jwt', refreshToken, {
       httpOnly: true,   // accessible only by web server
@@ -74,7 +74,7 @@ export async function refresh(req, res) {
       });
     }
 
-    const accessToken = createAccessToken(user);
+    const accessToken = createAccessToken(user, '2m');
     res.json({ accessToken });
   });
 }
