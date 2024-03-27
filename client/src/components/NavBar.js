@@ -24,7 +24,7 @@ const NavBar = () => {
             </Link>
           </li>
           <li className="expanded">
-            <Link to="/login">
+            <Link to="/add">
               <i className="material-icons">location_on</i>
               Add a Pin
             </Link>
@@ -58,13 +58,7 @@ const NavBar = () => {
               Filter
               <i className="material-icons">{filterOpen ? ("expand_less") : ("expand_more")}</i>
             </Link>
-            {filterOpen ? (
-              <div>
-                <button>International Work</button>
-                <button>Volunteer Work</button>
-                <button>Study Abroad</button>
-              </div>
-            ) : null}
+            
           </li>
         </ul>
       </div>

@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import '../static/css/pages/Home.css';
 import WorldMap from '../components/WorldMap.js';
 import NavBar from '../components/NavBar.js';
+import FilterBox from '../components/FilterBox.js';
 
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
@@ -10,10 +11,12 @@ const Home = () => {
   const [map, setMap] = useState(null)
   const ourRef = useRef(null);
   const [pointerDown, setPointerDown] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   document.querySelectorAll(".allPaths").forEach(e=>{
+  
 
     var country = document.getElementsByName(e.getAttribute('name'));
-
+   
     // function to detect if a user is hovering over a country
     function hovering(){
       // changes country color if hovering
@@ -41,6 +44,9 @@ const Home = () => {
     e.addEventListener("mouseout", out);
 
   })
+  const handleFilterMenu = () => {
+    setFilterOpen(!filterOpen);
+  }
 
   // coordinates of the mouse's position
   const coords = useRef({
@@ -149,6 +155,9 @@ const Home = () => {
       <div ref={ourRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp}>
         {map.render()}
       </div>
+      <div className="toggle-filter-button" onClick={handleFilterMenu}>
+          <FilterBox />
+       </div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [error, setError] = useState(null);
-
+  const [query, setQuery] = useState("");
   const getCountryFlag = (countryName) => {
     const trimmedCountryName = countryName.trim();
     return countryFlags[trimmedCountryName] || ''; 
@@ -63,18 +63,23 @@ const Search = () => {
 
   return (
     <div>
-      <NavBar />
-
+      <NavBar /> {/* Ensure NavBar is rendered */}
       <div className="app">
-        <form onSubmit={handleSearch}>
-          <input name="query" placeholder='Search Location...'></input>
-          <button type='submit'>Submit</button>
-        </form>
-        {experiences.map((post, index) => (
+        
+        <input className = "search" placeholder='Search Location...' onChange={event => setQuery(event.target.value)}></input>
+        {experiences.filter(post => {
+          
+          if (query === '') {
+            return post;
+          } else if (post.body.location.country.toLowerCase().includes(query.toLowerCase())) {
+            return post;
+          }
+        
+        }).map((post, index) => (
           <div className="box" key={index} onClick={() => openPopup(post)}>
             <div>
-              <p>{post.name.first} {post.name.last} ({post.contact.email})</p>
-              <p>{post.location.country}{post.location.region === null ? "" : ", " + post.location.region}</p>
+              <p>{post.name.firstName} {post.name.lastName} ({post.contact.email})</p>
+              <p>{post.body.location.country}{post.body.location.region === null ? "" : ", " + post.body.location.region}</p>
             </div>
             <div className="country-flag-container">
               <img src={getCountryFlag(post.location.country)} alt="Country Flag" className="country-flag" />
@@ -84,7 +89,7 @@ const Search = () => {
       </div>
       <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
     </div>
-  )
+  );
 }
 
 export default Search;
