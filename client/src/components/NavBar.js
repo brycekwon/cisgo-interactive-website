@@ -58,12 +58,16 @@ const NavBar = () => {
               Filter
               <i className="material-icons">{filterOpen ? ("expand_less") : ("expand_more")}</i>
             </Link>
-            
           </li>
         </ul>
+        <div className="login-button">
+          <Link to="/login">
+            Login
+          </Link>
+        </div>
       </div>
       <div className="toggle-button" onClick={handleToggleNavBar}>
-             {filterOpen ? (
+        {filterOpen ? (
           <i className="material-icons">close</i>
         ) : (
           <i className="material-icons">menu</i>
