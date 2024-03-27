@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const schema = Schema({
-  email: String,
+  username: String,
   password: String, // base-16 hash
 });
 
