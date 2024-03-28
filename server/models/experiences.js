@@ -7,7 +7,7 @@ const schema = mongoose.Schema({
     contactVisible: Boolean,  // entry contact information is visible to the public
   },
   name: String,           // name of entry individual
-  contact: String,        // email of entry individual
+  email: String,        // email of entry individual
   affiliation: String,    // affiliation to the university [ School, Admin, Library, CSC ]
   program: String,        // purpose of global experience [ Study Abroad, Teaching Abroad, Research ]
   location: {
