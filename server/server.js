@@ -27,8 +27,8 @@ app.all('*', (req, res) => {
 
 // error handler
 app.use((err, req, res, next) => {
-  console.error(`${err.name}: ${err.message}\t${req.method}\t${req.url}\t${req.headers.origin}`);
-  console.error(`\t${err.stack}`);
+  console.error(`${err.name}: ${err.message}\t${req.method}\t${req.url}`);
+  console.error(`${err.stack}`);
 
   const status = res.statusCode ? res.statusCode : 500;
   res.status(status).json({
