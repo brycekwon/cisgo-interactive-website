@@ -1,8 +1,8 @@
 .filter-box {
     position: fixed;
     top: 20px;
-    right: 20px;
-    width: 200px; /* Set a fixed width */
+    right: 10px; /* Adjusted to move slightly to the left */
+    width: 220px; /* Increased width */
     background-color: rgba(0, 0, 0, 0.5);
     padding: 10px;
     border-radius: 5px;
@@ -14,7 +14,6 @@
     color: white;
     margin: 0; /* Reset margin to zero */
     margin-bottom: 10px;
-    font-size: 26px;
     text-align: center;
   }
   
