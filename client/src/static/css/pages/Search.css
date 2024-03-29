@@ -1,5 +1,5 @@
 .app {
-  background-color: #a9bed2;
+  background-color: #84aacd;
 }
 
 .app {
@@ -9,14 +9,42 @@
   align-items: center;
   padding-top: 50px; /* Adjust as needed */
 }
+.search-options {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
+.search-options select {
+  padding: 10px;
+  margin-right: 10px;
+}
 .search {
   padding: 10px;
   border: 2px solid #edede0;
   border-radius: 5px;
-  margin-bottom: 20px;
-  width: 300px; /* Adjust as needed */
+  margin-bottom: 10px;
+  width: 200px; /* Adjust as needed */
   font-size: 16px;
+}
+.search-form {
+  display: flex;
+  align-items: center;
+}
+
+.submit-button {
+  padding: 10px 20px; /* Adjust padding as needed */
+  background-color: #007bff; /* Set background color */
+  color: white; /* Set text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Apply border radius */
+  cursor: pointer; /* Add cursor pointer */
+  transition: background-color 0.3s ease; /* Add smooth transition */
+  margin-left: 10px; /* Add margin to move it to the right */
+}
+
+.submit-button:hover {
+  background-color: #0056b3; /* Darker color on hover */
 }
 
 .search::placeholder {
