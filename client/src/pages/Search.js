@@ -74,8 +74,9 @@ const Search = () => {
         
         <div className="box" key={index} onClick={() => openPopup(post)}>
             <div>
-              <p>{post.name.first} {post.name.last} ({post.contact.email})</p>
-              <p>{post.location.country}{post.location.region === null ? "" : ", " + post.location.region}</p></div>
+              <p>{post.name} ({post.email})</p>
+              <p>{post.location.country}{post.location.city === null ? "" : ", " + post.location.city}</p>
+            </div>
             <div className="country-flag-container">
               <img src={getCountryFlag(post.location.country)} alt="Country Flag" className="country-flag" />
             </div>
