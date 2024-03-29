@@ -11,14 +11,6 @@ export async function getExperiences(req, res) {
  * @param {Express.Response} res
  */
 export async function searchExperienceByParams(req, res) {
-  // TODO: GET /
-  // Add support for querystring searching
-  // console.log(req.hostname);
-
-  // const experiences = await (req.body.query
-  // 	? experienceModel.find({location: req.body.query})
-  // 	: experienceModel.find({})
-  // );
   let experiences;
   if (!req.body.query) {
     experiences = await experienceModel.find({}).lean();
