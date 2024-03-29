@@ -66,21 +66,16 @@ const Search = () => {
       <NavBar /> {/* Ensure NavBar is rendered */}
       <div className="app">
         
-        <input className = "search" placeholder='Search Location...' onChange={event => setQuery(event.target.value)}></input>
-        {experiences.filter(post => {
-          
-          if (query === '') {
-            return post;
-          } else if (post.body.location.country.toLowerCase().includes(query.toLowerCase())) {
-            return post;
-          }
+        <form onSubmit={handleSearch}>
+          <input name="query" placeholder='Search Location...'></input>
+          <button type='submit'>Submit</button>
+        </form>
+        {experiences.map((post, index) => (
         
-        }).map((post, index) => (
-          <div className="box" key={index} onClick={() => openPopup(post)}>
+        <div className="box" key={index} onClick={() => openPopup(post)}>
             <div>
-              <p>{post.name.firstName} {post.name.lastName} ({post.contact.email})</p>
-              <p>{post.body.location.country}{post.body.location.region === null ? "" : ", " + post.body.location.region}</p>
-            </div>
+              <p>{post.name.first} {post.name.last} ({post.contact.email})</p>
+              <p>{post.location.country}{post.location.region === null ? "" : ", " + post.location.region}</p></div>
             <div className="country-flag-container">
               <img src={getCountryFlag(post.location.country)} alt="Country Flag" className="country-flag" />
             </div>
