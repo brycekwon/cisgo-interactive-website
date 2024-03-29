@@ -9,28 +9,31 @@
     z-index: 1000;
     overflow: hidden; /* Prevent content overflow */
   }
-
+  
   .filter-box h2 {
     color: white;
     margin: 0; /* Reset margin to zero */
     margin-bottom: 10px;
+    font-size: 26px;
     text-align: center;
   }
-
+  
   .filter-box label {
     display: block;
     color: white;
     margin: 0; /* Reset margin to zero */
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* Reduce bottom margin */
+    font-size: 14px; /* Set the font size */
   }
+  
   .filter-box input[type="checkbox"] {
     margin-right: 5px;
     vertical-align: middle; /* Align checkboxes vertically */
   }
   
-
   .filter-content {
     position: relative; /* Ensure content stays fixed relative to the box */
     height: 100%; /* Occupy full height of the box */
     overflow-y: auto; /* Add vertical scroll if content exceeds box height */
   }
+  
