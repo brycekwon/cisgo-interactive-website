@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import asyncHandler from 'express-async-handler';
 
 import authModel from '../models/credentials.js';
 import { createAccessToken, createRefreshToken } from '../util/secretToken.js';
@@ -9,7 +10,7 @@ import { createAccessToken, createRefreshToken } from '../util/secretToken.js';
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export async function accountLogin(req, res) {
+export const accountLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (username === undefined || password === undefined) {
     return res.status(400).json({
@@ -17,45 +18,40 @@ export async function accountLogin(req, res) {
     });
   }
 
-  try {
-    const user = await authModel.findOne({ username });
-    if (!user) {
-      return res.status(401).json({
-        message: 'User not found',
-      });
-    }
-
-    const isAdmin = await bcrypt.compare(password, user.password);
-    if (!isAdmin) {
-      return res.status(400).json({
-        message: 'Invalid email or password',
-      });
-    }
-
-    const accessToken = createAccessToken(user, '2m');
-    const refreshToken = createRefreshToken(user, '1d');
-
-    res.cookie('jwt', refreshToken, {
-      httpOnly: true,   // accessible only by web server
-      secure: true,     // https
-      maxAge: 1 * 24 * 60 * 60 * 1000,    // cookie expiry: set to match refresh token time
+  const user = await authModel.findOne({ username });
+  if (!user) {
+    return res.status(401).json({
+      message: 'User not found',
     });
-
-    res.status(200).json({
-      accessToken,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500);
   }
-}
+
+  const isAdmin = await bcrypt.compare(password, user.password);
+  if (!isAdmin) {
+    return res.status(400).json({
+      message: 'Invalid email or password',
+    });
+  }
+
+  const accessToken = createAccessToken(user, '2m');
+  const refreshToken = createRefreshToken(user, '1d');
+
+  res.cookie('jwt', refreshToken, {
+    httpOnly: true,   // accessible only by web server
+    secure: true,     // https
+    maxAge: 1 * 24 * 60 * 60 * 1000,    // cookie expiry: set to match refresh token time
+  });
+
+  res.status(200).json({
+    accessToken,
+  });
+});
 
 /**
  * @route POST /auth/logout
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export function accountLogout(req, res) {
+export const accountLogout = (req, res) => {
   const { cookies } = req;
   if (!cookies?.jwt) {
     return res.status(200).json({
@@ -72,7 +68,7 @@ export function accountLogout(req, res) {
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export function tokenRefresh(req, res) {
+export const tokenRefresh = (req, res) => {
   const { cookies } = req;
   if (!cookies?.jwt) {
     return res.status(401).json({
@@ -100,3 +96,4 @@ export function tokenRefresh(req, res) {
     res.json({ accessToken });
   });
 }
+
