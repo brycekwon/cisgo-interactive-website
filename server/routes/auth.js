@@ -5,8 +5,8 @@ import loginLimiter from '../middleware/loginLimiter.js';
 
 const authRouter = Router();
 
-authRouter.route('/login').post(loginLimiter, controller.tryLogin);
-authRouter.route('/logout').post(controller.tryLogout);
-authRouter.route('/refresh').get(controller.refresh);
+authRouter.post('/login', loginLimiter, controller.accountLogin);
+authRouter.post('/logout', controller.accountLogout);
+authRouter.get('/refresh', controller.tokenRefresh);
 
 export default authRouter;

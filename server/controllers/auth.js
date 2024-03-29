@@ -5,11 +5,11 @@ import authModel from '../models/credentials.js';
 import { createAccessToken, createRefreshToken } from '../util/secretToken.js';
 
 /**
- *
+ * @route POST /auth/login
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export async function tryLogin(req, res) {
+export async function accountLogin(req, res) {
   const { username, password } = req.body;
   if (username === undefined || password === undefined) {
     return res.status(400).json({
@@ -45,12 +45,34 @@ export async function tryLogin(req, res) {
       accessToken,
     });
   } catch (err) {
-    // TODO: maybe build custom error handler?
-    console.log(err);
+    console.error(err);
+    res.status(500);
   }
 }
 
-export async function refresh(req, res) {
+/**
+ * @route POST /auth/logout
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+export function accountLogout(req, res) {
+  const { cookies } = req;
+  if (!cookies?.jwt) {
+    return res.status(200).json({
+      message: 'No cookies found',
+    });
+  }
+
+  res.clearCookie('jwt', { httpOnly: true, secure: true });
+  res.status(200).json({ message: 'Cookie cleared' });
+}
+
+/**
+ * @route GET auth/refresh
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+export function tokenRefresh(req, res) {
   const { cookies } = req;
   if (!cookies?.jwt) {
     return res.status(401).json({
@@ -77,17 +99,4 @@ export async function refresh(req, res) {
     const accessToken = createAccessToken(user, '2m');
     res.json({ accessToken });
   });
-}
-
-/**
- *
- * @param {Express.Request} req
- * @param {Express.Response} res
- */
-export function tryLogout(req, res) {
-  const { cookies } = req;
-  if (!cookies?.jwt) return res.status(204);    // BUG: hangs if cleared without cookies
-
-  res.clearCookie('jwt', { httpOnly: true, secure: true });
-  res.json({ message: 'Cookie cleared' });
 }
