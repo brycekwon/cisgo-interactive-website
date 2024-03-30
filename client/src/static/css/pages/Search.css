@@ -1,8 +1,5 @@
 .app {
   background-color: #84aacd;
-}
-
-.app {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,47 +11,80 @@
   align-items: center;
   margin-bottom: 20px;
 }
+.search-bar {
+  display: flex;
+  align-items: center;
+   /* Adjust as needed */
+  height: 50px; /* Set a fixed height */
+}
+
+.search-bar input {
+  margin-left: 10px;
+  margin-right: 9px;
+  width: 615px;
+  padding: 10px;
+  border: 2px solid #edede0;
+  border-radius: 5px;
+  flex-grow: 1; /* Expand input to fill available space */
+  font-size: 16px;
+}
+
+
 
 .search-options select {
   padding: 10px;
   margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  
 }
+
+
+.search-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
 .search {
   padding: 10px;
   border: 2px solid #edede0;
   border-radius: 5px;
   margin-bottom: 10px;
-  width: 200px; /* Adjust as needed */
+  flex-grow: 2; /* Expand to fill available space */
   font-size: 16px;
-}
-.search-form {
-  display: flex;
-  align-items: center;
+  width: 100%; /* Set width to 100% */
 }
 
 .submit-button {
-  padding: 10px 20px; /* Adjust padding as needed */
-  background-color: #007bff; /* Set background color */
-  color: white; /* Set text color */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Apply border radius */
-  cursor: pointer; /* Add cursor pointer */
-  transition: background-color 0.3s ease; /* Add smooth transition */
-  margin-left: 10px; /* Add margin to move it to the right */
+  padding: 10px 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  margin-right: 95px;
 }
 
 .submit-button:hover {
   background-color: #0056b3; /* Darker color on hover */
 }
 
-.search::placeholder {
-  color: #6c757d;
+.search-form {
+  display: flex;
+  align-items: center;
 }
 
 .box {
-
   background-color: #f8f7e9;
-
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 20px;
