@@ -23,6 +23,9 @@ dependencies:
   express:
     specifier: ^4.19.2
     version: 4.19.2
+  express-async-handler:
+    specifier: ^1.2.0
+    version: 1.2.0
   http-errors:
     specifier: ~1.6.3
     version: 1.6.3
@@ -1949,6 +1952,10 @@ packages:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
     dev: true
+
+  /express-async-handler@1.2.0:
+    resolution: {integrity: sha512-rCSVtPXRmQSW8rmik/AIb2P0op6l7r1fMW538yyvTMltCO4xQEWMmobfrIxN2V1/mVrgxB8Az3reYF6yUZw37w==}
+    dev: false
 
   /express@4.19.2:
     resolution: {integrity: sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==}

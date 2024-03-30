@@ -1,10 +1,11 @@
-import mongoose from 'mongoose';
+import { isValidObjectId } from 'mongoose';
+import asyncHandler from 'express-async-handler';
 
 import experienceModel from '../models/experiences.js';
 
 
 // TODO: add check for results
-export async function searchExperiences(req, res) {
+export const searchExperiences = asyncHandler(async (req, res) => {
   const results = await experienceModel.find(
     req.query.q
       ? {
@@ -16,11 +17,11 @@ export async function searchExperiences(req, res) {
         }
   /* ,'_id name email location' */);
   res.status(200).json(results);
-}
+});
 
-export async function getExperience(req, res) {
+export const getExperience = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  if (!id || !mongoose.isValidObjectId(id)) {
+  if (!id || !isValidObjectId(id)) {
     return res.status(404).json({
       message: 'No entry found',
     });
@@ -34,9 +35,9 @@ export async function getExperience(req, res) {
   }
 
   res.status(200).json(result);
-}
+});
 
-export async function addExperience(req, res) {
+export const addExperience = asyncHandler(async (req, res) => {
   const {
     isApproved,
     isVisible,
@@ -55,7 +56,6 @@ export async function addExperience(req, res) {
     description,
   } = req.body;
 
-  console.log('fe')
   if (![isApproved, isVisible, contactVisible].every((field) => typeof field === 'boolean')) {
     return res.status(400).json({
       status: 400,
@@ -114,16 +114,16 @@ export async function addExperience(req, res) {
     message: 'Entry added',
   });
 
-}
+});
 
 /**
  * @route POST /experiences/edit/:id
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export async function editExperience(req, res) {
+export const editExperience = asyncHandler( async (req, res) => {
   const id = req.params.id;
-  if (!id || !mongoose.isValidObjectId(id)) {
+  if (!id || !isValidObjectId(id)) {
     return res.status(404).json({
       message: "No entry found"
     });
@@ -180,4 +180,4 @@ export async function editExperience(req, res) {
   return res.status(200).json({
     message: 'Entry updated',
   });
-}
+});
