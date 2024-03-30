@@ -3,6 +3,7 @@ import createError from 'http-errors';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
+import compression from 'compression';
 import cors from 'cors';
 
 import 'dotenv/config.js';
@@ -13,6 +14,7 @@ import experiencesRouter from './routes/experiences.js';
 const app = express();
 
 app.use(cors());
+app.use(compression());
 
 app.use(logger('dev'));
 app.use(express.json());
