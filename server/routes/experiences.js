@@ -4,11 +4,10 @@ import * as controller from '../controllers/experiences.js';
 
 const experiencesRouter = Router();
 
-experiencesRouter.get('/', controller.getExperiences);
-experiencesRouter.get('/:id', controller.searchExperienceById);
+experiencesRouter.get('/', controller.searchExperiences);
+experiencesRouter.get('/:id', controller.getExperience);
 
-experiencesRouter.post('/', controller.searchExperienceByParams);
-experiencesRouter.post('/new', controller.addExperience);
-experiencesRouter.post('/edit/:id', controller.editExperience);
+experiencesRouter.post('/add', controller.addExperience);   // TODO: add limiter on request?
+experiencesRouter.post('/edit/:id', controller.editExperience);  // TODO: add auth middleware
 
 export default experiencesRouter;
