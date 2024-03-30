@@ -5,6 +5,11 @@ import experienceModel from '../models/experiences.js';
 
 
 // TODO: add check for results
+/**
+ * @route GET /experiences
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
 export const searchExperiences = asyncHandler(async (req, res) => {
   const results = await experienceModel.find(
     req.query.q
@@ -15,10 +20,15 @@ export const searchExperiences = asyncHandler(async (req, res) => {
       : {
           'meta.isVisible': true,
         }
-  /* ,'_id name email location' */);
+  /* ,'_id name email location' */).lean();
   res.status(200).json(results);
 });
 
+/**
+ * @route GET /experiences/:id
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
 export const getExperience = asyncHandler(async (req, res) => {
   const id = req.params.id;
   if (!id || !isValidObjectId(id)) {
@@ -27,7 +37,7 @@ export const getExperience = asyncHandler(async (req, res) => {
     });
   }
 
-  const result = await experienceModel.findById(id);
+  const result = await experienceModel.findById(id).lean();
   if (!result || !result.meta.isVisible) {
     return res.status(404).json({
       message: 'No entry found',
@@ -37,6 +47,11 @@ export const getExperience = asyncHandler(async (req, res) => {
   res.status(200).json(result);
 });
 
+/**
+ * @route POST /experiences/add/:id
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
 export const addExperience = asyncHandler(async (req, res) => {
   const {
     isApproved,
