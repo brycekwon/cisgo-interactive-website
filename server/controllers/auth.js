@@ -60,8 +60,44 @@ export const accountLogout = (req, res) => {
   }
 
   res.clearCookie('jwt', { httpOnly: true, secure: true });
-  res.status(200).json({ message: 'Cookie cleared' });
+  res.status(200).json({ message: 'Tokens cleared' });
 }
+
+/**
+ * @route POST auth/update
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+export const updatePassword = asyncHandler(async (req, res) => {
+  const { username, password } = req.body;
+  if (!password) {
+    return res.status(400).json({
+      message: 'All fields are required',
+    });
+  }
+
+  const saltRounds = 10;
+  const hash = await bcrypt.hash(password, saltRounds);
+
+  const user = await authModel.findOne({ username });
+  if (!user) {
+    return res.status(401).json({
+      message: 'User not found',
+    });
+  }
+
+  user.password = hash;
+  const status = await user.save();
+  if (!status) {
+    return res.status(401).json({
+      message: 'Could not change password',
+    });
+  }
+
+  return res.status(200).json({
+    message: 'Password changed successfully',
+  });
+})
 
 /**
  * @route GET auth/refresh
@@ -91,6 +127,7 @@ export const tokenRefresh = (req, res) => {
         message: 'Unauthorized',
       });
     }
+    // TODO: Remove auth headers
 
     const accessToken = createAccessToken(user, '2m');
     res.json({ accessToken });
