@@ -2,29 +2,39 @@ import { isValidObjectId } from 'mongoose';
 import asyncHandler from 'express-async-handler';
 
 import experienceModel from '../models/experiences.js';
+import { isValidDate } from '../util/validDate.js';
 
+// INFO: does not check for duplicate OID (chance < 1 in 1.8x10^19)
 
-// TODO: add check for results
 /**
+ * Searches the experiences database for entries matching the provided queries
+ *
  * @route GET /experiences
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
 export const searchExperiences = asyncHandler(async (req, res) => {
-  const results = await experienceModel.find(
-    req.query.q
-      ? {
-          'meta.isVisible': true,
-          'location.country': new RegExp(req.query.q, 'i'),
-        }
-      : {
-          'meta.isVisible': true,
-        }
-  /* ,'_id name email location' */).lean();
-  res.status(200).json(results);
+  const query = {
+    'meta.isApproved': true,
+    'meta.isVisible': true,
+  };
+  if (req.query.q) {
+    query['location.country'] = new RegExp(req.query.q, 'i');
+  }
+
+  const results = await experienceModel.find(query).lean();
+  if (!results?.length) {
+    return res.status(200).json({
+      message: 'No entries found',
+    });
+  }
+
+  return res.status(200).json(results);
 });
 
 /**
+ * Searches the experiences database for entries based on ID
+ *
  * @route GET /experiences/:id
  * @param {Express.Request} req
  * @param {Express.Response} res
@@ -32,22 +42,31 @@ export const searchExperiences = asyncHandler(async (req, res) => {
 export const getExperience = asyncHandler(async (req, res) => {
   const id = req.params.id;
   if (!id || !isValidObjectId(id)) {
-    return res.status(404).json({
+    return res.status(400).json({
+      message: 'Invalid request',
+    });
+  }
+
+  const query = {
+    '_id': id,
+    'meta.isApproved': true,
+    'meta.isVisible': true,
+  };
+
+  const results = await experienceModel.findOne(query).lean();
+  if (!results) {
+    return res.status(200).json({
       message: 'No entry found',
     });
   }
 
-  const result = await experienceModel.findById(id).lean();
-  if (!result || !result.meta.isVisible) {
-    return res.status(404).json({
-      message: 'No entry found',
-    });
-  }
-
-  res.status(200).json(result);
+  res.status(200).json(results);
 });
 
 /**
+ * Adds a new entry to the experiences database
+ * TODO: checks before saving into database
+ *
  * @route POST /experiences/add/:id
  * @param {Express.Request} req
  * @param {Express.Response} res
@@ -64,32 +83,37 @@ export const addExperience = asyncHandler(async (req, res) => {
     country,
     city,
     ongoing,
-    startDate,
-    endDate,
     institutions,
     partnerships,
     description,
   } = req.body;
 
-  if (![isApproved, isVisible, contactVisible].every((field) => typeof field === 'boolean')) {
+  let { startDate, endDate } = req.body;
+
+  const boolFields = [isApproved, isVisible, contactVisible, ongoing];
+  if (!boolFields.every((field) => typeof field === 'boolean')) {
     return res.status(400).json({
-      status: 400,
-      message: 'All boolean fields are required.',
+      message: 'All fields are required',
     });
   }
 
   const stringFields = [name, email, affiliation, program, country, city, institutions, partnerships, description];
   if (!stringFields.every((field) => typeof field === 'string' && field.trim() !== '')) {
     return res.status(400).json({
-      status: 400,
-      message: 'All string fields are required',
+      message: 'All fields are required',
     });
   }
 
-  if (typeof startDate !== 'string' || typeof endDate !== 'string') {
+  if (ongoing) {
+    startDate = "";
+    endDate = "";
+  } else if (typeof startDate !== 'string' || typeof endDate !== 'string') {
     return res.status(400).json({
-      status: 400,
-      message: 'All dates are requried',
+      message: 'All fields are requried',
+    });
+  } else if (!isValidDate(startDate) || !isValidDate(endDate)) {
+    return res.status(400).json({
+      message: 'Invalid request',
     });
   }
 
@@ -118,6 +142,7 @@ export const addExperience = asyncHandler(async (req, res) => {
     },
     description: description,
   });
+
   const status = await newEntry.save();
   if (!status) {
     return res.status(401).json({
@@ -128,19 +153,28 @@ export const addExperience = asyncHandler(async (req, res) => {
   return res.status(200).json({
     message: 'Entry added',
   });
-
 });
 
 /**
+ * Edit existing entry in experiences database by ID
+ * TODO: checks before saving into database
+ *
  * @route POST /experiences/edit/:id
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export const editExperience = asyncHandler( async (req, res) => {
+export const editExperience = asyncHandler(async (req, res) => {
   const id = req.params.id;
   if (!id || !isValidObjectId(id)) {
-    return res.status(404).json({
-      message: "No entry found"
+    return res.status(400).json({
+      message: 'Invalid request',
+    });
+  }
+
+  const entry = await experienceModel.findById(id);
+  if (!entry) {
+    return res.status(401).json({
+      message: 'Entry not found',
     });
   }
 
@@ -161,13 +195,6 @@ export const editExperience = asyncHandler( async (req, res) => {
     partnerships,
     description,
   } = req.body;
-
-  const entry = await experienceModel.findById(id);
-  if (!entry) {
-    return res.status(401).json({
-      message: 'Entry not found',
-    });
-  }
 
   entry.meta.isApproved = isApproved ?? entry.meta.isApproved;
   entry.meta.isVisible = isVisible ?? entry.meta.isVisible;
