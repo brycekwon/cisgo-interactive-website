@@ -19,14 +19,13 @@ export const searchExperiences = asyncHandler(async (req, res) => {
     'meta.isVisible': true,
   };
   if (req.query.q) {
-    query['location.country'] = new RegExp(req.query.q, 'i');
+    // query['location.country'] = new RegExp(req.query.q, 'i');
+    query['location.country'] = new RegExp(req.query.q.trim().matchAll("[a-zA-Z0-9 -_\.]"), 'i');
   }
 
   const results = await experienceModel.find(query).lean();
   if (!results?.length) {
-    return res.status(200).json({
-      message: 'No entries found',
-    });
+    return res.status(200).json([]);
   }
 
   return res.status(200).json(results);
@@ -81,7 +80,7 @@ export const addExperience = asyncHandler(async (req, res) => {
   const newEntry = new experienceModel(req.body);
   const status = await newEntry.save();
   if (!status) {
-    return res.status(401).json({
+    return res.status(500).json({
       message: 'Could not save entry',
     });
   }
@@ -115,7 +114,7 @@ export const editExperience = asyncHandler(async (req, res) => {
 
   const status = await experienceModel.findByIdAndUpdate(id, req.body);
   if (!status) {
-    return res.status(401).json({
+    return res.status(500).json({
       message: 'Could not save entry',
     });
   }
