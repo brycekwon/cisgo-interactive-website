@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import asyncHandler from 'express-async-handler';
 
-const verifyToken = (req, res, next) => {
+const verifyToken = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     return res.status(401).json({
@@ -9,21 +10,16 @@ const verifyToken = (req, res, next) => {
   }
 
   const token = authHeader.split(' ')[1];
-  try {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(403).json({
-          message: 'Forbidden',
-        });
-      }
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({
+        message: 'Forbidden',
+      });
+    }
 
-      req.user = decoded.username;
-      next();
-    });
-
-  } catch(err) {
-    console.log(err)
-  }
-}
+    req.user = decoded.username;
+    next();
+  });
+});
 
 export default verifyToken;

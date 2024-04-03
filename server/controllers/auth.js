@@ -12,7 +12,7 @@ import { createAccessToken, createRefreshToken } from '../util/secretToken.js';
  */
 export const accountLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
-  if (username === undefined || password === undefined) {
+  if (!username || !password) {
     return res.status(400).json({
       message: 'All fields are required',
     });
@@ -21,14 +21,14 @@ export const accountLogin = asyncHandler(async (req, res) => {
   const user = await authModel.findOne({ username });
   if (!user) {
     return res.status(401).json({
-      message: 'User not found',
+      message: 'Invalid username or password',
     });
   }
 
   const isAdmin = await bcrypt.compare(password, user.password);
   if (!isAdmin) {
-    return res.status(400).json({
-      message: 'Invalid email or password',
+    return res.status(401).json({
+      message: 'Invalid username or password',
     });
   }
 
@@ -75,22 +75,22 @@ export const updatePassword = asyncHandler(async (req, res) => {
       message: 'All fields are required',
     });
   }
-
+  
   const saltRounds = 10;
   const hash = await bcrypt.hash(password, saltRounds);
 
   const user = await authModel.findOne({ username });
   if (!user) {
     return res.status(401).json({
-      message: 'User not found',
+      message: 'Invalid username or password',
     });
   }
 
   user.password = hash;
   const status = await user.save();
   if (!status) {
-    return res.status(401).json({
-      message: 'Could not change password',
+    return res.status(500).json({
+      message: 'Unable to change password',
     });
   }
 
