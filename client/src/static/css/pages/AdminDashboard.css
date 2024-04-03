@@ -21,7 +21,47 @@
     border-radius: 5px;
     overflow: hidden;
 }
-
+.user-icon {
+    background-image: url('../../images/user.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 44px;
+    height: 34px;
+    z-index: 10;
+    cursor: pointer;
+    position: fixed;
+    bottom: 50px; /* Adjust as needed */
+    left: 210px; /* Adjust as needed */
+  }
+  
+  .user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* Adjust as needed */
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1;
+  }
+  
+  .user-icon:hover + .user-dropdown,
+  .user-dropdown:hover {
+    display: block;
+  }
+  
+  .user-dropdown a {
+    color: #333;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+  }
+  
+  .user-dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+  
 .tab {
     flex: 1;
     padding: 10px 0;

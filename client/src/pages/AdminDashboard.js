@@ -185,7 +185,7 @@ const AdminDashboard = () => {
       // Handle error if needed
     }
   };
-  
+
 
 
 
@@ -265,7 +265,21 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <div className="dashboard-header">
         <h1>Admin Dashboard</h1>
+        <div className="user-options">
+          <div className="user-icon dropdown">
+            <button className="dropbtn"></button>
+            <div className="user-dropdown dropdown-content">
+              <a href="/view-map">View Map</a>
+              <a href="/change-password">Change Password</a>
+              <a href="/logout">Logout</a>
+            </div>
+          </div>
+        </div>
       </div>
+
+
+
+
       <div className="sort-switch">
         <p>Sort By:</p>
         <select value={activeTab === 'All' ? sortByAll : activeTab === 'Visible' ? sortByVisible : activeTab === 'Hidden' ? sortByHidden : sortByUnapproved} onChange={e => activeTab === 'All' ? setSortByAll(e.target.value) : activeTab === 'Visible' ? setSortByVisible(e.target.value) : activeTab === 'Hidden' ? setSortByHidden(e.target.value) : setSortByUnapproved(e.target.value)}>
@@ -481,6 +495,7 @@ const AdminDashboard = () => {
       </div>
 
 
+
       {/* Dashboard content */}
       <div className="dashboard-content-container">
         <div className="dashboard-content">
@@ -528,3 +543,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
