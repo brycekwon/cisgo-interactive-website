@@ -3,19 +3,14 @@ import { Link } from 'react-router-dom';
 import '../static/css/components/NavBar.css';
 
 const NavBar = () => {
-  const [filterOpen, setFilterOpen] = useState(false);
-
-  const handleFilterMenu = () => {
-    setFilterOpen(!filterOpen);
-  }
-
+  const [navbarOpen, setNavbarOpen] = useState(false);
   const handleToggleNavBar = () => {
-    setFilterOpen(!filterOpen);
+    setNavbarOpen(!navbarOpen);
   }
 
   return (
     <div>
-      <div className={`navbar ${filterOpen ? "expanded" : "collapsed"}`}>
+      <div className={`navbar ${navbarOpen ? "expanded" : "collapsed"}`}>
         <ul className="nav">
           <li className="expanded">
             <Link to="/">
@@ -24,7 +19,7 @@ const NavBar = () => {
             </Link>
           </li>
           <li className="expanded">
-            <Link to="/login">
+            <Link to="/add">
               <i className="material-icons">location_on</i>
               Add a Pin
             </Link>
@@ -53,27 +48,22 @@ const NavBar = () => {
               Help
             </Link>
           </li>
+        </ul>
+        <ul className={"login-button nav"}>
           <li className="expanded">
-            <Link onClick={handleFilterMenu}>
-              Filter
-              <i className="material-icons">{filterOpen ? ("expand_less") : ("expand_more")}</i>
+            <Link to="/login">
+              <i className="material-icons">lock</i>
+              Login
             </Link>
-            {filterOpen ? (
-              <div>
-                <button>International Work</button>
-                <button>Volunteer Work</button>
-                <button>Study Abroad</button>
-              </div>
-            ) : null}
           </li>
         </ul>
       </div>
       <div className="toggle-button" onClick={handleToggleNavBar}>
-             {filterOpen ? (
+        {navbarOpen ? (
           <i className="material-icons">close</i>
         ) : (
-          <i className="material-icons">menu</i>
-        )}
+            <i className="material-icons">menu</i>
+          )}
       </div>
     </div>
   );
