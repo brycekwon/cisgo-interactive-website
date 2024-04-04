@@ -19,8 +19,7 @@ export const searchExperiences = asyncHandler(async (req, res) => {
     'meta.isVisible': true,
   };
   if (req.query.q) {
-    // query['location.country'] = new RegExp(req.query.q, 'i');
-    query['location.country'] = new RegExp(req.query.q.trim().matchAll("[a-zA-Z0-9 -_\.]"), 'i');
+    query['location.country'] = new RegExp(req.query.q.trim().match(/[a-zA-Z0-9 -_\.]+/), 'i');
   }
 
   const results = await experienceModel.find(query).lean();
