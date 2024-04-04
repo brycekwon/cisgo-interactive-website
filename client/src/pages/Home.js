@@ -194,7 +194,7 @@ const Home = () => {
       </div>
       <div className="bottom_container">
         <div className="close_button_container">
-          <button className="close_button">Hide</button>
+          <button className="close_button">Hide Experiences</button>
         </div>
         <div className="experiences_container">
           {experiences.map((post, index) => (
