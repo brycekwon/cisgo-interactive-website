@@ -326,7 +326,7 @@
     border-radius: 5px;
     cursor: pointer;
     position: absolute; /* Position the submit button absolutely */
-    bottom: 1720px; /* Adjusted bottom position */
+    bottom: 1600px; /* Adjusted bottom position */
     right: 170px; /* Adjusted right position */
     max-width: 100px; /* Adjust the maximum width as needed */
 }
@@ -340,7 +340,7 @@
     border-radius: 5px;
     cursor: pointer;
     position: absolute; /* Position the submit button absolutely */
-    bottom: 365px; /* Adjusted bottom position */
+    bottom: 385px; /* Adjusted bottom position */
     right: 170px; /* Adjusted right position */
     max-width: 100px; /* Adjust the maximum width as needed */
 }
@@ -354,7 +354,7 @@
     border-radius: 5px;
     cursor: pointer;
     position: absolute; /* Position the submit button absolutely */
-    bottom: 365px; /* Adjusted bottom position */
+    bottom: 385px; /* Adjusted bottom position */
     right: 170px; /* Adjusted right position */
     max-width: 100px; /* Adjust the maximum width as needed */
 }
@@ -368,7 +368,7 @@
     border-radius: 5px;
     cursor: pointer;
     position: absolute; /* Position the submit button absolutely */
-    bottom: 500px; /* Adjusted bottom position */
+    bottom: 520px; /* Adjusted bottom position */
     right: 170px; /* Adjusted right position */
     max-width: 100px; /* Adjust the maximum width as needed */
 }
