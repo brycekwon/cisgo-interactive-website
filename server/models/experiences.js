@@ -16,15 +16,18 @@ const schema = mongoose.Schema({
   },
   duration: {
     ongoing: Boolean,     // entry is still ongoing - NO START OR END DATE REQUIRED
-    startDate: Date,      // entry start date MONTH AND YEAR (YYYY-MM)
-    endDate: Date,        // entry end date MONTH AND YEAR (YYYY-MM)
+    startDate: String,      // entry start date MONTH AND YEAR (YYYY-MM)
+    endDate: String,        // entry end date MONTH AND YEAR (YYYY-MM)
   },
   external: {
     institutions: String,   // external institutions worked with
     partnerships: String,   // external partnersships worked with
   },
   description: String,      // description of individual's experience (instructions coming from client)
-});
+}, {
+    versionKey: false,
+  }
+);
 
 const model = mongoose.model('experiences', schema);
 

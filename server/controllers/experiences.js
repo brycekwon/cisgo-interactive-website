@@ -1,42 +1,124 @@
-import experienceModel from '../models/experiences.js';
+import { isValidObjectId } from 'mongoose';
+import asyncHandler from 'express-async-handler';
 
-export async function getExperiences(req, res) {
-  const experiences = await experienceModel.find({}).lean();
-  res.json(experiences);
-}
+import experienceModel from '../models/experiences.js';
+import { isValidExperience } from '../util/validExperience.js';
+
+// INFO: does not check for duplicate OID (chance < 1 in 1.8x10^19)
 
 /**
- * Searches the experience database. Optionally narrows search by location.
+ * Searches the experiences database for entries matching the provided queries
+ *
+ * @route GET /experiences
  * @param {Express.Request} req
  * @param {Express.Response} res
  */
-export async function searchExperienceByParams(req, res) {
-  let experiences;
-  if (!req.body.query) {
-    experiences = await experienceModel.find({}).lean();
-  } else {
-    experiences = await experienceModel.find({
-      'location.country': new RegExp(req.body.query, 'i'),
+export const searchExperiences = asyncHandler(async (req, res) => {
+  const query = {
+    'meta.isApproved': true,
+    'meta.isVisible': true,
+  };
+  if (req.query.q) {
+    query['location.country'] = new RegExp(req.query.q.trim().match(/[a-zA-Z0-9 -_\.]+/), 'i');
+  }
+
+  const results = await experienceModel.find(query).lean();
+  if (!results?.length) {
+    return res.status(200).json([]);
+  }
+
+  return res.status(200).json(results);
+});
+
+/**
+ * Searches the experiences database for entries based on ID
+ *
+ * @route GET /experiences/:id
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+export const getExperience = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!id || !isValidObjectId(id)) {
+    return res.status(400).json({
+      message: 'Invalid request',
     });
   }
-  res.json(experiences);
-}
 
-export async function searchExperienceById(req, res) {
-  const experiences = await experienceModel.findById(req.params.id).lean();
-  res.json(experiences);
-}
+  const query = {
+    '_id': id,
+    'meta.isApproved': true,
+    'meta.isVisible': true,
+  };
 
-export async function addExperience(req, res) {
-  // TODO: POST /
-  // Add a new entry to the database
-  res.sendStatus(204);
-}
+  const results = await experienceModel.findOne(query).lean();
+  if (!results) {
+    return res.status(200).json({
+      message: 'No entry found',
+    });
+  }
 
-export async function editExperience(req, res) {
-  // TODO: POST /:id
-  // 1. Check that the user is permitted to edit the entry
-  // 2.1. Success: Update the entry.   Inform the user of success.
-  // 2.2. Failure: Don't change entry. Inform the user of failure.
-  res.sendStatus(204);
-}
+  res.status(200).json(results);
+});
+
+/**
+ * Adds a new entry to the experiences database
+ * TODO: checks before saving into database
+ *
+ * @route POST /experiences/add/:id
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+export const addExperience = asyncHandler(async (req, res) => {
+  if (!isValidExperience(req.body)) {
+    return res.status(400).json({
+      message: 'Invalid request',
+    });
+  }
+
+  const newEntry = new experienceModel(req.body);
+  const status = await newEntry.save();
+  if (!status) {
+    return res.status(500).json({
+      message: 'Could not save entry',
+    });
+  }
+
+  return res.status(200).json({
+    message: 'Entry added',
+  });
+});
+
+/**
+ * Edit existing entry in experiences database by ID
+ * TODO: checks before saving into database
+ *
+ * @route POST /experiences/edit/:id
+ * @param {Express.Request} req
+ * @param {Express.Response} res
+ */
+export const editExperience = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  if (!id || !isValidObjectId(id)) {
+    return res.status(400).json({
+      message: 'Invalid request',
+    });
+  }
+
+  if (!isValidExperience(req.body)) {
+    return res.status(400).json({
+      message: 'Invalid request',
+    });
+  }
+
+  const status = await experienceModel.findByIdAndUpdate(id, req.body);
+  if (!status) {
+    return res.status(500).json({
+      message: 'Could not save entry',
+    });
+  }
+
+  return res.status(200).json({
+    message: 'Entry updated',
+  });
+});
