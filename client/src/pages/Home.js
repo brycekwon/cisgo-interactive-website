@@ -4,6 +4,8 @@ import '../static/css/pages/Home.css';
 import WorldMap from '../components/WorldMap.js';
 import NavBar from '../components/NavBar.js';
 import FilterBox from '../components/FilterBox.js';
+import '../static/css/components/ExperiencesPopup.css';
+import countryFlags from '../data/countryFlags.js';
 
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
@@ -12,10 +14,18 @@ const Home = () => {
   const ourRef = useRef(null);
   const [pointerDown, setPointerDown] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  document.querySelectorAll(".allPaths").forEach(e=>{
+  const [error, setError] = useState(null);
+  const getCountryFlag = (countryName) => {
+    const trimmedCountryName = countryName.trim();
+    return countryFlags[trimmedCountryName] || ''; 
+  };
+
   
 
+  document.querySelectorAll(".allPaths").forEach(e=>{
+  
     var country = document.getElementsByName(e.getAttribute('name'));
+    var countryName = e.getAttribute('name')
    
     // function to detect if a user is hovering over a country
     function hovering(){
@@ -42,6 +52,30 @@ const Home = () => {
 
     // event listener when user stops hovering over a country
     e.addEventListener("mouseout", out);
+
+    // for country on-click
+    const countrySelected = async (e) =>{
+      const myName = countryName;
+      e.preventDefault();
+      console.log(myName);
+      await fetch(`${process.env.REACT_APP_API}/experiences`, {
+      method: "post",
+      body: JSON.stringify({
+          "query": myName,
+      }),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+      }).then(async (res) => {
+          let data = await res.json();
+          setExperiences(data);
+      }).catch((err) => {
+          console.log(err);
+          setError(err);
+      });
+    }
+
+    e.addEventListener("click", countrySelected);
 
   })
   const handleFilterMenu = () => {
@@ -156,8 +190,26 @@ const Home = () => {
         {map.render()}
       </div>
       <div className="toggle-filter-button" onClick={handleFilterMenu}>
-          <FilterBox />
-       </div>
+        <FilterBox />
+      </div>
+      <div className="bottom_container">
+        <div className="close_button_container">
+          <button className="close_button">Hide</button>
+        </div>
+        <div className="experiences_container">
+          {experiences.map((post, index) => (
+            <div className="box" key={index}>
+              <div>
+                <p>{post.name} ({post.email})</p>
+                <p>{post.location.country}{post.location.city === null ? "" : ", " + post.location.city}</p>
+              </div>
+              <div className="country-flag-container">
+                <img src={getCountryFlag(post.location.country)} alt="Country Flag" className="country-flag" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
