@@ -43,17 +43,19 @@ const AdminLogin = () => {
   }
 
   return (
-    <div id="container" class="login-container">
-      <h1>Welcome Back!</h1>
-      <body>
-        <form onSubmit={handleLogin} method="get" id="login-form">
-          <input type="email" id="email" name="email" placeholder="Email" required></input>
+    <div>
+      <header class="admin_header">
+        <h1 class="admin_title">Welcome Back!</h1>
+      </header>
+      <main class="admin_main">
+        <form onSubmit={handleLogin} method="get" class="login-form">
+          <input type="email" class="email" name="email" placeholder="Email" required></input>
           <br />
-          <input type="password" id="password" name="password" placeholder="Password" required></input>
+          <input type="password" class="password" name="password" placeholder="Password" required></input>
           <br />
-          <button type="submit" id="login-button">Log In</button>
+          <button type="submit" class="login-button">Log In</button>
         </form>
-      </body>
+      </main>
     </div>
   );
 }
