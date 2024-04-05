@@ -35,7 +35,7 @@
   max-width: 600px; /* Adjust as needed */
   display: flex; /* Make the box a flex container */
   justify-content: space-between; /* Push items to the start and end of the container */
-  align-items: center; /* Center items along the cross axis */
+  align-items: center; /* Center items along the cross axis */ 
   cursor: pointer; /* Add cursor pointer to indicate clickability */
 }
 
