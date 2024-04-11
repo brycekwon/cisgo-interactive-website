@@ -138,7 +138,7 @@ const AdminDashboard = () => {
             event.stopPropagation(); // Stop event propagation to avoid triggering the popup
             const updatedExperienceHide = { ...experience, meta: { ...experience.meta, isVisible: false } };
             await fetch(`${process.env.REACT_APP_API}/experiences/${experience.id}`, {
-              method: 'PUT',
+              method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
               },
