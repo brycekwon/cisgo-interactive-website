@@ -3,7 +3,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import '../static/css/pages/Home.css';
 import WorldMap from '../components/WorldMap.js';
 import NavBar from '../components/NavBar.js';
-import FilterBox from '../components/FilterBox.js';
+import FilterBox from '../components/FilterBox.js'
+import { makePin, placePinsOnMap } from './MakePin.js';;
 
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
@@ -82,7 +83,7 @@ const Home = () => {
     }
     return point;
   }
-
+ 
   // sets the position for when a user clicks the screen
   const handleMouseDown = (e) => {
     if (!ourRef.current) return
@@ -133,15 +134,25 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${process.env.REACT_APP_API}/experiences`).then(async(res) => {
-      setExperiences(await res.json());
-      setLoading(false);
-    }).catch((err) => {
+    fetch(`${process.env.REACT_APP_API}/experiences`)
+      .then(async (res) => {
+        setExperiences(await res.json());
+        setLoading(false);
+      })
+      .catch((err) => {
         console.log(err);
         setLoading(false);
       });
     setMap(new WorldMap(null));
   }, []);
+  
+  useEffect(() => {
+    // Place pins on the map after experiences are loaded
+    if (map && experiences.length > 0) {
+      placePinsOnMap(map, experiences);
+    }
+  }, [map, experiences, loading]);
+
 
   if (loading) {
     return <div></div>;
@@ -153,13 +164,14 @@ const Home = () => {
     <div className="body">
       <NavBar />
       <div ref={ourRef} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp}>
-        {map.render()}
+        {map && map.render()}
       </div>
       <div className="toggle-filter-button" onClick={handleFilterMenu}>
-          <FilterBox />
-       </div>
+        <FilterBox />
+      </div>
     </div>
   );
+  
 }
 
 export default Home;
