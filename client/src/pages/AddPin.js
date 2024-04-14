@@ -60,10 +60,10 @@ const AddPin = () => {
 
   return (
     <div>
-      <header>
-        <h1>Add a Pin to the map</h1>
+      <header class="pin_header">
+        <h1 class="pin_title">Add a Pin to the map</h1>
       </header>
-      <main>
+      <main class="pin_content">
         <form action="/success" method="get" id="pin-form">
           <div className="form-group">
             <label htmlFor="first-name">First Name:</label>
@@ -125,8 +125,6 @@ const AddPin = () => {
           <button type="submit">Submit</button>
         </form>
       </main>
-      <footer>
-      </footer>
     </div>
   );
 }

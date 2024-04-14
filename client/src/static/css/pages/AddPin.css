@@ -1,11 +1,13 @@
-body {
+.pin_content{
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
+  cursor: auto;
+  padding: 2rem;
 }
 
-header {
+.pin_header {
   background-color: #333;
   color: #fff;
   text-align: center;
@@ -32,20 +34,16 @@ header {
   background-color: #f0f0f0;
 }
 
-header h1 {
+.pin_title {
   margin: 0;
   font-size: 2rem;
-}
-
-main {
-  padding: 2rem;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
 }
 
-label {
+.pin_labels {
   font-weight: bold;
 }
 
@@ -59,7 +57,7 @@ select {
   border-radius: 4px;
 }
 
-button {
+.pin_submit {
   padding: 0.5rem 1rem;
   background-color: #333;
   color: #fff;
@@ -68,7 +66,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.pin_submit:hover {
   background-color: #555;
 }
 
@@ -77,18 +75,4 @@ footer {
   color: #fff;
   text-align: center;
   padding: 1rem 0;
-}
-
-footer p {
-  margin: 0;
-}
-
-footer a {
-  color: #fff;
-  text-decoration: none;
-  margin: 0 0.5rem;
-}
-
-footer a:hover {
-  text-decoration: underline;
 }

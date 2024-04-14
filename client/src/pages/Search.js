@@ -10,8 +10,7 @@ const Search = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState(null);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
+
   const getCountryFlag = (countryName) => {
     const trimmedCountryName = countryName.trim();
     return countryFlags[trimmedCountryName] || ''; 
@@ -27,24 +26,16 @@ const Search = () => {
 
   const handleSearch = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.target);
     setLoading(true);
-    await fetch(`${process.env.REACT_APP_API}/experiences`, {
-      method: "post",
-      body: JSON.stringify({
-        "query": formData.get("query"),
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+
+    const data = new FormData(event.target);
+    await fetch(`${process.env.REACT_APP_API}/experiences?q=${data.get("query")}`, {
+      method: 'get',
     }).then(async (res) => {
-      let data = await res.json();
-      setExperiences(data);
+      setExperiences(await res.json());
       setLoading(false);
     }).catch((err) => {
       console.log(err);
-      setError(err);
-      setLoading(false);
     });
   }
 
@@ -57,13 +48,9 @@ const Search = () => {
     </div>;
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div>
-      <NavBar /> {/* Ensure NavBar is rendered */}
+      <NavBar />
       <div className="app">
         
         <form onSubmit={handleSearch}>

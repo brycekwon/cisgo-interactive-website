@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "apicache": "^1.6.3",
+    "compression": "^1.7.4",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
