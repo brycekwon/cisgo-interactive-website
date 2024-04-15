@@ -73,7 +73,7 @@ const Search = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <NavBar />
       <div className="app">
         <div className="search-options">
@@ -105,6 +105,8 @@ const Search = () => {
             <button type='submit' className="submit-button">Submit</button>
           </form>
         </div>
+      </div>
+      <div className="expList">
         {experiences.map((post, index) => (
           <div key={index} className="box" onClick={() => openPopup(post)}>
             <div>
