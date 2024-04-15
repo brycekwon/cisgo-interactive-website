@@ -4,7 +4,8 @@
 }
 
 .app {
-  background-color: #3c5570;
+  background-color: rgba(0, 0, 0, 0.23);
+  border-bottom: 5px solid white;
   display: flex;
   flex-direction: column;
   justify-content: center;
