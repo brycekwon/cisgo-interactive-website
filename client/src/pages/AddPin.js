@@ -79,7 +79,7 @@ const AddPin = () => {
           </div>
           <div className="form-group">
             <label>Department at University of Portland:</label>
-            <div className="filter-box">
+            <div className="filter">
               {Object.keys(departments).map((department, index) => (
                 <div key={index}>
                   <input

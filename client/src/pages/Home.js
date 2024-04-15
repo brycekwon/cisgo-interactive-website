@@ -4,7 +4,6 @@ import '../static/css/pages/Home.css';
 import WorldMap from '../components/WorldMap.js';
 import NavBar from '../components/NavBar.js';
 import FilterBox from '../components/FilterBox.js';
-import { makePin } from './MakePin.js'; // Import the makePin function
 
 
 const Home = () => {
@@ -146,33 +145,7 @@ const Home = () => {
       });
     setMap(new WorldMap(null));
   }, []);
-
-  useEffect(() => {
-    if (experiences.length > 0 && ourRef.current) {
-      createPins();
-    }
-  }, [experiences, ourRef.current]);
   
-
-  const createPins = () => {
-    const countryPins = {}; // Object to store country pins and their counts
-  
-    experiences.forEach((experience) => {
-      const { country } = experience.location; // Get the country from experience data
-  
-      // If the country is not in the countryPins object, initialize its count to 1
-      if (!countryPins[country]) {
-        countryPins[country] = 1;
-      } else {
-        // If the country already has a pin, increment its count
-        countryPins[country]++;
-      }
-  
-      // Create pin based on cowuntry and its count
-      makePin(ourRef.current, country, countryPins[country]);
-    });
-  };
-
   console.log(experiences)
 
   return (
