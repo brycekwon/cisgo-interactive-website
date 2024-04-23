@@ -43,14 +43,6 @@ const NavBar = () => {
             </Link>
           </li>
           <li className="expanded">
-            <Link to="/help">
-              <i className="material-icons">help</i>
-              Help
-            </Link>
-          </li>
-        </ul>
-        <ul className={"login-button nav"}>
-          <li className="expanded">
             <Link to="/login">
               <i className="material-icons">lock</i>
               Login

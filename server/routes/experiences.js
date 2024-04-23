@@ -1,14 +1,16 @@
 import { Router } from 'express';
+import apicache from 'apicache';
 
 import * as controller from '../controllers/experiences.js';
+import verifyToken from '../middleware/verifyToken.js';
 
 const experiencesRouter = Router();
+const cache = apicache.middleware;
 
-experiencesRouter.get('/', controller.getExperiences);
-experiencesRouter.get('/:id', controller.searchExperienceById);
+experiencesRouter.get('/', cache('5 minutes'), controller.searchExperiences);
+experiencesRouter.get('/:id', cache('5 minutes'), controller.getExperience);
 
-experiencesRouter.post('/', controller.searchExperienceByParams);
-experiencesRouter.post('/new', controller.addExperience);
-experiencesRouter.post('/edit/:id', controller.editExperience);
+experiencesRouter.post('/add', controller.addExperience);
+experiencesRouter.post('/:id', verifyToken, controller.editExperience);
 
 export default experiencesRouter;

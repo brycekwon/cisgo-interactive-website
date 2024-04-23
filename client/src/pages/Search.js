@@ -29,7 +29,7 @@ const Search = () => {
     event.preventDefault();
     setLoading(true);
     await fetch(`${process.env.REACT_APP_API}/experiences`, {
-      method: "post",
+      method: 'get',
       body: JSON.stringify({
         "query": query,
       }),
@@ -37,13 +37,10 @@ const Search = () => {
         'Content-Type': 'application/json'
       }
     }).then(async (res) => {
-      let data = await res.json();
-      setExperiences(data);
+      setExperiences(await res.json());
       setLoading(false);
     }).catch((err) => {
       console.log(err);
-      setError(err);
-      setLoading(false);
     });
   };
 
@@ -66,10 +63,6 @@ const Search = () => {
         </div>
       </div>
     );
-  }
-
-  if (error) {
-    return <div>{error}</div>;
   }
 
   return (
