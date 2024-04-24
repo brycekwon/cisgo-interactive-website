@@ -61,6 +61,59 @@ export const getExperience = asyncHandler(async (req, res) => {
   res.status(200).json(results);
 });
 
+// ple?tab=${activeTab}&sortBy=${activeSort}`)
+//       // switch(activeTab) {
+      //   case 'Visible':
+      //     data = data.filter(experience => experience.meta.isVisible && experience.meta.isApproved);
+      //     break;
+      //   case 'Hidden':
+      //     data = data.filter(experience => !experience.meta.isVisible && experience.meta.isApproved);
+      //     break;
+      //   case 'Unapproved':
+      //     data = data.filter(experience => !experience.meta.isApproved);
+      //     break;
+      //   default:
+      //     break;
+      // }
+export const getAllExperiences = asyncHandler(async (req, res) => {
+  const activeTab = req.query.tab.trim();
+  const activeSort = req.query.sortBy.trim();
+  if (!activeSort || !activeSort) {
+    return res.status(401).json([]);
+  }
+
+  let query = {};
+  if (activeTab === 'Visible') {
+    query = {
+      'meta.isVisible': true,
+      'meta.isApproved': true,
+    }
+  } else if (activeTab === 'Hidden') {
+    query = {
+      'meta.isVisible': false,
+      'meta.isApproved': true,
+    }
+  } else if (activeTab === 'Unapproved') {
+    query = {
+      'meta.isApproved': false,
+    }
+  }
+  console.log(query)
+
+  const results = await experienceModel.find(query).lean();
+  if (!results?.length) {
+    return res.status(200).json([]);
+  }
+
+  if (activeSort === 'Country') {
+    results.sort((a, b) => (a.location.country > b.location.country) ? 1 : -1);
+  } else if (activeSort === 'Name') {
+    results.sort((a, b) => (a.name > b.name) ? 1 : -1);
+  }
+
+  return res.status(200).json(results);
+});
+
 /**
  * Adds a new entry to the experiences database
  * TODO: checks before saving into database

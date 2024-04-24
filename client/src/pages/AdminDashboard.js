@@ -1,125 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import Popup from '../components/SearchPopup.js';
-import countryFlags from '../data/countryFlags.js';
 import '../static/css/pages/AdminDashboard.css';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('All');
+  const [activeSort, setActiveSort] = useState('Country');
+  const [fetchDataFlag, setFetchDataFlag] = useState(true);
   const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [selectedExperience, setSelectedExperience] = useState(null);
-  const [sortByAll, setSortByAll] = useState('recentToLatest');
-  const [sortByVisible, setSortByVisible] = useState('recentToLatest');
-  const [sortByHidden, setSortByHidden] = useState('recentToLatest');
-  const [sortByUnapproved, setSortByUnapproved] = useState('recentToLatest');
-  const [searchFiltersAll, setSearchFiltersAll] = useState({
-    location: '',
-    name: '',
-    email: '',
-    description: ''
-  });
-  const [searchFiltersVisible, setSearchFiltersVisible] = useState({
-    location: '',
-    name: '',
-    email: '',
-    description: ''
-  });
-  const [searchFiltersHidden, setSearchFiltersHidden] = useState({
-    location: '',
-    name: '',
-    email: '',
-    description: ''
-  });
-  const [searchFiltersUnapproved, setSearchFiltersUnapproved] = useState({
-    location: '',
-    name: '',
-    email: '',
-    description: ''
-  });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchData();
-  }, [activeTab, sortByAll, sortByVisible, sortByHidden, sortByUnapproved]);
+    if (fetchDataFlag) {
+      fetchData();
+      setFetchDataFlag(false);
+    }
+  }, [fetchDataFlag]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      let response;
-      let sortByParam;
-
-      switch (activeTab) {
-        case 'Visible':
-          sortByParam = sortByVisible;
-          response = await fetch(`${process.env.REACT_APP_API}/experiences?isVisible=true&isApproved=true&sortBy=${sortByParam}`);
-          break;
-        case 'Hidden':
-          sortByParam = sortByHidden;
-          response = await fetch(`${process.env.REACT_APP_API}/experiences?isVisible=false&sortBy=${sortByParam}`);
-          break;
-        case 'Unapproved':
-          sortByParam = sortByUnapproved;
-          response = await fetch(`${process.env.REACT_APP_API}/experiences?isApproved=false&sortBy=${sortByParam}`);
-          break;
-        default:
-          // For 'All' tab, fetch all experiences regardless of visibility or approval status
-          sortByParam = sortByAll;
-          response = await fetch(`${process.env.REACT_APP_API}/experiences?sortBy=${sortByParam}`);
-          break;
-      }
-
+      let response = await fetch(`${process.env.REACT_APP_API}/experiences/people?tab=${activeTab}&sortBy=${activeSort}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
-
       let data = await response.json();
-
-      // Sort data based on selected sort option for the current tab
-      switch (sortByParam) {
-        case 'firstName':
-          data.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-        case 'country':
-          data.sort((a, b) => a.location.country.localeCompare(b.location.country));
-          break;
-        default:
-          // No sorting required for other options
-          break;
-      }
-
-      // Filter data based on visibility and approval status for specific tabs
-      switch (activeTab) {
-        case 'Visible':
-          data = data.filter(experience => experience.meta.isVisible && experience.meta.isApproved);
-          break;
-        case 'Hidden':
-          data = data.filter(experience => !experience.meta.isVisible);
-          break;
-        case 'Unapproved':
-          data = data.filter(experience => !experience.meta.isApproved);
-          break;
-        default:
-          break;
-      }
 
       setExperiences(data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
-      setError(error.message);
-      setLoading(false);
     }
   };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    setFetchDataFlag(true);
   };
+
+  const handleSortClick = (option) => {
+    setActiveSort(option)
+    setFetchDataFlag(true);
+  }
 
   const openPopup = (experience) => {
     setSelectedExperience(experience);
   };
-
-
 
   const closePopup = () => {
     setSelectedExperience(null);
@@ -186,37 +112,6 @@ const AdminDashboard = () => {
     }
   };
 
-
-
-
-
-  const handleInputChangeAll = (e, filterName) => {
-    setSearchFiltersAll({
-      ...searchFiltersAll,
-      [filterName]: e.target.value
-    });
-  };
-
-  const handleInputChangeVisible = (e, filterName) => {
-    setSearchFiltersVisible({
-      ...searchFiltersVisible,
-      [filterName]: e.target.value
-    });
-  };
-
-  const handleInputChangeHidden = (e, filterName) => {
-    setSearchFiltersHidden({
-      ...searchFiltersHidden,
-      [filterName]: e.target.value
-    });
-  };
-
-  const handleInputChangeUnapproved = (e, filterName) => {
-    setSearchFiltersUnapproved({
-      ...searchFiltersUnapproved,
-      [filterName]: e.target.value
-    });
-  };
   const handleApprove = (experience) => {
     // Show confirmation popup
     const isConfirmed = window.confirm("Are you sure you want to approve?");
@@ -230,34 +125,6 @@ const AdminDashboard = () => {
     const isConfirmed = window.confirm("Are you sure you want to decline?");
     if (isConfirmed) {
       // Call function to decline
-    }
-  };
-
-
-  const handleSubmit = () => {
-    switch (activeTab) {
-      case 'All':
-        // Handle submit for All tab
-        console.log('Search filters for All tab:', searchFiltersAll);
-        fetchData(); // Fetch data with new filters and sort for All tab
-        break;
-      case 'Visible':
-        // Handle submit for Visible tab
-        console.log('Search filters for Visible tab:', searchFiltersVisible);
-        fetchData(); // Fetch data with new filters and sort for Visible tab
-        break;
-      case 'Hidden':
-        // Handle submit for Hidden tab
-        console.log('Search filters for Hidden tab:', searchFiltersHidden);
-        fetchData(); // Fetch data with new filters and sort for Hidden tab
-        break;
-      case 'Unapproved':
-        // Handle submit for Unapproved tab
-        console.log('Search filters for Unapproved tab:', searchFiltersUnapproved);
-        fetchData(); // Fetch data with new filters and sort for Unapproved tab
-        break;
-      default:
-        break;
     }
   };
 
@@ -277,212 +144,13 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-
-
-
       <div className="sort-switch">
         <p>Sort By:</p>
-        <select value={activeTab === 'All' ? sortByAll : activeTab === 'Visible' ? sortByVisible : activeTab === 'Hidden' ? sortByHidden : sortByUnapproved} onChange={e => activeTab === 'All' ? setSortByAll(e.target.value) : activeTab === 'Visible' ? setSortByVisible(e.target.value) : activeTab === 'Hidden' ? setSortByHidden(e.target.value) : setSortByUnapproved(e.target.value)}>
-          <option value="firstName">First Name</option>
-          <option value="country">Country</option>
-          <option value="recentToLatest">Recent to Latest</option>
-          <option value="latestToRecent">Latest to Recent</option>
+        <select>
+          <option value="country" onClick={() => handleSortClick('Country')}>Country</option>
+          <option value="name" onClick={() => handleSortClick('Name')}>Name</option>
         </select>
       </div>
-
-      {/* Search containers for different tabs */}
-      {activeTab === 'All' && (
-        <div className="search-container-all">
-          <div className="advanced-search-title">Advanced Search </div>
-          <div className="search-boxes">
-            <div className="search-box">
-              <label htmlFor="location">Location:</label>
-              <input
-                type="text"
-                id="location"
-                value={searchFiltersAll.location}
-                onChange={(e) => handleInputChangeAll(e, 'location')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                value={searchFiltersAll.name}
-                onChange={(e) => handleInputChangeAll(e, 'name')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="text"
-                id="email"
-                value={searchFiltersAll.email}
-                onChange={(e) => handleInputChangeAll(e, 'email')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="description">Description:</label>
-              <input
-                type="text"
-                id="description"
-                value={searchFiltersAll.description}
-                onChange={(e) => handleInputChangeAll(e, 'description')}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'Visible' && (
-        <div className="search-container-visible">
-          <div className="advanced-search-title">Advanced Search </div>
-          <div className="search-boxes">
-            <div className="search-box">
-              <label htmlFor="location">Location:</label>
-              <input
-                type="text"
-                id="location"
-                value={searchFiltersVisible.location}
-                onChange={(e) => handleInputChangeVisible(e, 'location')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                value={searchFiltersVisible.name}
-                onChange={(e) => handleInputChangeVisible(e, 'name')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="text"
-                id="email"
-                value={searchFiltersVisible.email}
-                onChange={(e) => handleInputChangeVisible(e, 'email')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="description">Description:</label>
-              <input
-                type="text"
-                id="description"
-                value={searchFiltersVisible.description}
-                onChange={(e) => handleInputChangeVisible(e, 'description')}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'Hidden' && (
-        <div className="search-container-hidden">
-          <div className="advanced-search-title">Advanced Search </div>
-          <div className="search-boxes">
-            <div className="search-box">
-              <label htmlFor="location">Location:</label>
-              <input
-                type="text"
-                id="location"
-                value={searchFiltersHidden.location}
-                onChange={(e) => handleInputChangeHidden(e, 'location')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                value={searchFiltersHidden.name}
-                onChange={(e) => handleInputChangeHidden(e, 'name')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="text"
-                id="email"
-                value={searchFiltersHidden.email}
-                onChange={(e) => handleInputChangeHidden(e, 'email')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="description">Description:</label>
-              <input
-                type="text"
-                id="description"
-                value={searchFiltersHidden.description}
-                onChange={(e) => handleInputChangeHidden(e, 'description')}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'Unapproved' && (
-        <div className="search-container-unapproved">
-          <div className="advanced-search-title">Advanced Search </div>
-          <div className="search-boxes">
-            <div className="search-box">
-              <label htmlFor="location">Location:</label>
-              <input
-                type="text"
-                id="location"
-                value={searchFiltersUnapproved.location}
-                onChange={(e) => handleInputChangeUnapproved(e, 'location')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="name">Name:</label>
-              <input
-                type="text"
-                id="name"
-                value={searchFiltersUnapproved.name}
-                onChange={(e) => handleInputChangeUnapproved(e, 'name')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="text"
-                id="email"
-                value={searchFiltersUnapproved.email}
-                onChange={(e) => handleInputChangeUnapproved(e, 'email')}
-              />
-            </div>
-            <div className="search-box">
-              <label htmlFor="description">Description:</label>
-              <input
-                type="text"
-                id="description"
-                value={searchFiltersUnapproved.description}
-                onChange={(e) => handleInputChangeUnapproved(e, 'description')}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Submit button based on active tab */}
-      {activeTab === 'All' && (
-        <button className="submit-button submit-button-all" onClick={handleSubmit}>Submit</button>
-      )}
-
-      {activeTab === 'Visible' && (
-        <button className="submit-button submit-button-visible" onClick={handleSubmit}>Submit</button>
-      )}
-
-      {activeTab === 'Hidden' && (
-        <button className="submit-button submit-button-hidden" onClick={handleSubmit}>Submit</button>
-      )}
-
-      {activeTab === 'Unapproved' && (
-        <button className="submit-button submit-button-unapproved" onClick={handleSubmit}>Submit</button>
-      )}
 
       {/* Tabs */}
       <div className="dashboard-tabs">
@@ -494,14 +162,11 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-
-
       {/* Dashboard content */}
       <div className="dashboard-content-container">
         <div className="dashboard-content">
           {loading && <p>Loading...</p>}
-          {error && <p>{error}</p>}
-          {!loading && !error && experiences.map((experience, index) => (
+          {!loading && experiences.map((experience, index) => (
             <div className="dashboard-item" key={index} onClick={() => openPopup(experience)}>
               <div className="item-info">
                 <p>Name: {experience.name}</p>
@@ -509,9 +174,6 @@ const AdminDashboard = () => {
                 <p>Country: {experience.location.country}</p>
               </div>
               <div className="item-options">
-                {experience.meta && !experience.meta.isApproved && (
-                  <span className="icon icon-exclamation">&#9888;</span>
-                )}
                 {experience.meta && !experience.meta.isVisible && (
                   <span className="icon icon-eye"></span>
                 )}
@@ -535,12 +197,9 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-
-
       <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
     </div>
   );
 };
 
 export default AdminDashboard;
-
