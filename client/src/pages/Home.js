@@ -37,8 +37,8 @@ const Home = () => {
       point.y = e.clientY;
     }
     return point;
-  };
 
+  };
   const handleMouseDown = (e) => {
     const point = getPoint(e);
     coords.current = point; // Use coords ref here
@@ -139,7 +139,6 @@ const Home = () => {
       });
     };
   }, []);  // Dependency array left empty to run effect only once on mount
-  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -163,7 +162,6 @@ const Home = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Home;
