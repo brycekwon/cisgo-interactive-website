@@ -1,15 +1,14 @@
-import React from "react";
-import pinImage from "../static/images/pin.png";
+import React from 'react';
+import pinImage from '../static/images/pin.png'; // Assuming the correct path to the pin image
 
-const Pin = ({ x, y, count }) => (
-  <div style={{ position: "absolute", left: x, top: y }}>
-    <div style={{ position: "relative" }}>
-      {/* Use the imported image */}
-      <img src={pinImage} alt="Pin" />
-      {/* Display count if there are multiple experiences */}
-      {count > 1 && <span>{count}</span>}
-    </div>
-  </div>
+const Pin = ({ x, y }) => (
+  <image
+    href={pinImage}
+    x={x}
+    y={y}
+    width={20} // Adjust width as needed
+    height={20} // Adjust height as needed
+  />
 );
 
 export default Pin;

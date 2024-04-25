@@ -3,47 +3,29 @@ import Pin from './Pin.js'; // Assuming Pin component is defined in a separate f
 import '../static/css/components/WorldMap.css';
 
 class WorldMap extends React.Component {
-  constructor(props) {
-    super(props);
-    
-    // Initialize countryCoordinates within the constructor
-    this.countryCoordinates = {
-      Japan: [
-        { x: 1708.5, y: 282.6 },
-        { x: 1733.1, y: 263.4 },
-        { x: 1721.2, y: 218.6 }
-      ],
-    };
-  }
-
-  renderPins() {
-    // Ensure countryCoordinates is defined
-    if (!this.countryCoordinates) return null;
-
-    // Count occurrences of each country
-    const countryCounts = Object.keys(this.countryCoordinates).reduce((acc, country) => {
-      acc[country] = (acc[country] || 0);
-      return acc;
-    }, {});
-
-    // Render pins for each country
-    return Object.entries(countryCounts).map(([country, count], index) => {
-      const { x, y } = this.calculatePinPosition(country);
-      return <Pin key={index} x={x} y={y} count={count} />;
-    });
-  }
-
-  calculatePinPosition(country) {
-    const coordinates = this.countryCoordinates[country];
-    const averageX = coordinates.reduce((sum, coord) => sum + coord.x, 0) / coordinates.length;
-    const averageY = coordinates.reduce((sum, coord) => sum + coord.y, 0) / coordinates.length;
-    return { x: averageX, y: averageY };
-  }
-
   render() {
+    const { experiences } = this.props;
+
+    // Ensure experiences is not undefined before accessing its properties
+    if (!experiences) {
+      return null; // or render a loading indicator or handle the case appropriately
+    }
+
+    const countryPositions = {
+      "Japan": { x: 1700, y: 300 },
+      "Angola": { x:1000, y: 100 },
+      "China": { x: 1700, y: 100 },
+    };
+
+    const pins = Object.entries(countryPositions).map(([countryName, position]) => (
+      <Pin key={countryName} x={position.x} y={position.y} />
+    ));
+    
     return (
       <div className="world_map">
+        
         <svg id ="world_map" baseprofile="tiny" fill="#ececec" height="857" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" version="1.2" viewBox="0 0 2000 857" width="2000" xmlns="http://www.w3.org/2000/svg">
+          
           <path class="allPaths"
             d="M1383 261.6l1.5 1.8-2.9 0.8-2.4 1.1-5.9 0.8-5.3 1.3-2.4 2.8 1.9 2.7 1.4 3.2-2 2.7 0.8 2.5-0.9 2.3-5.2-0.2 3.1 4.2-3.1 1.7-1.4 3.8 1.1 3.9-1.8 1.8-2.1-0.6-4 0.9-0.2 1.7-4.1 0-2.3 3.7 0.8 5.4-6.6 2.7-3.9-0.6-0.9 1.4-3.4-0.8-5.3 1-9.6-3.3 3.9-5.8-1.1-4.1-4.3-1.1-1.2-4.1-2.7-5.1 1.6-3.5-2.5-1 0.5-4.7 0.6-8 5.9 2.5 3.9-0.9 0.4-2.9 4-0.9 2.6-2-0.2-5.1 4.2-1.3 0.3-2.2 2.9 1.7 1.6 0.2 3 0 4.3 1.4 1.8 0.7 3.4-2 2.1 1.2 0.9-2.9 3.2 0.1 0.6-0.9-0.2-2.6 1.7-2.2 3.3 1.4-0.1 2 1.7 0.3 0.9 5.4 2.7 2.1 1.5-1.4 2.2-0.6 2.5-2.9 3.8 0.5 5.4 0z" 
             name="Afghanistan">
@@ -471,6 +453,8 @@ class WorldMap extends React.Component {
             d="M1198.1 295.3l-0.9 1-10.4 3.2 6 6.5-1.6 1-0.7 2.2-4.1 0.9-1.1 2.3-2.1 2-6.2-1.1-0.3-0.9 1.8-10.2-0.4-2.5 0.6-1.9-0.4-4 0.7-2 6.3 2.6 9.7-6.9 3.1 7.8z" 
             name="Jordan">
           </path>
+          
+          
           <path class="allPaths" name="Japan"
             d="M 1708.5 282.6 1710.1 284.8 1708.8 288.7 1705.7 286.6 1703.6 288.1 1703.7 291.8 1699.4 290 1698.2 287 1699.5 283.1 1702.9 283.9 1703.9 281.2 1708.5 282.6 Z">
           </path>
@@ -480,6 +464,7 @@ class WorldMap extends React.Component {
           <path class="allPaths" name="Japan"
             d="M 1721.2 218.6 1725.7 219.9 1727.5 217.3 1733.5 224.4 1727.1 226.1 1726.7 232.4 1715.8 228.1 1717.4 235 1711.7 235.1 1707 228.8 1706.4 223.9 1711.6 223.6 1707.2 214.8 1705.4 209.9 1715.9 216.5 1721.2 218.6 Z">          
           </path>
+          
           <path class="allPaths"
             d="M1338.3 160.5l4.4-0.3 9.2-5.8-0.8 2 8.4 4.7 18.3 15.6 1.1-3.2 8.4 3.5 6.2-1.6 3.3 1.1 4.1 3.6 4 1.2 3.3 2.7 6-0.9 4.4 3.8-1.9 4.2-3.8 0.6 2.5 6.2-1.6 2.9-10.8-2.1 1 11.3-2 1.4-9.1 2.5 8.8 11-2.9 1.6 1.7 3.7-3.5-1-3.4-2.3-7.9-0.6-8.6-0.2-1.6 0.7-8.2-2.7-2.5 1.4 0.5 3.7-9.2-2.2-3.1 0.9-0.3 2.8-2.6 1.2-5.4 4.4-0.9 4.6-2 0-2.3-3-6.7-0.2-2.5-5.2-2.6-0.1-1.5-6.4-7.6-4.6-8.6 0.5-5.7 0.9-6.6-5.7-4.8-2.4-9.2-4.5-1.1-0.5-12 3.7 6.2 23.4-2.6 0.3-4.8-5-3.9-1.8-5.6 1.3-1.8 2.2-0.6-1.6 0.6-2.6-1.5-2.2-6.5-2.2-3.7-5.7-3.2-1.6-0.6-2.1 5.1 0.6-1-4.6 4.1-1 4.7 0.9-0.7-6.1-1.9-3.9-5 0.3-4.7-1.5-5.1 2.7-4.4 1.4-2.8-1.1-0.2-3.2-4.3-4.2-3.6 0.2-5.3-4.2 1.7-4.8-1.8-1.2 2.2-6.9 6 3.6-0.6-4.5 8.1-6.7 7.6-0.2 12 4.3 6.6 2.5 4.4-2.6 7.7-0.1 7.3 3.2 0.8-1.9 7 0.3 0.2-2.9-9.4-4.3 3.5-3-1.5-1.6 4-1.6-5.1-4.2 1.4-2.1 17-2.1 1.7-1.5 10.9-2.3 3.1-2.5 9.1 1.3 4.4 6.3 4.3-1.5 7.1 2.1 1.1 3.3z" 
             name="Kazakhstan">
@@ -1570,8 +1555,7 @@ class WorldMap extends React.Component {
           </circle>
           <circle cx="1798.2" cy="719.3" id="2">
           </circle>
-          {this.map}
-          {this.renderPins()}
+          {pins}
 
         </svg>
       </div>

@@ -1,0 +1,9 @@
+.pin-container {
+    position: absolute;
+  }
+  
+  .pin-image {
+    width: 20px;
+    height: 20px;
+  }
+  
