@@ -18,16 +18,47 @@
   fill: rgb(34, 59, 5);
 }
 
+/* Tooltip container */
 .pin-tooltip {
-  font-size: 12px;
-  fill: #fff; /* Text color */
-  background-color: rgba(0, 0, 0, 0.7); /* Background color */
-  padding: 5px;
-  border-radius: 5px;
-  pointer-events: none; /* Ensures the tooltip doesn't interfere with mouse events */
-  visibility: hidden;
+  position: relative;
+  display: inline-block;
 }
 
-.g:hover .pin-tooltip {
+/* Tooltip text */
+.pin-tooltip .tooltip-text {
+  visibility: hidden;
+  width: 160px; /* Adjust width as needed */
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-family: Arial, sans-serif; /* Choose appropriate font family */
+  font-size: 14px; /* Adjust font size as needed */
+  line-height: 1.4; /* Adjust line height for better readability */
+}
+
+/* Tooltip arrow */
+.pin-tooltip .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+}
+
+/* Show tooltip on hover */
+.pin-tooltip:hover .tooltip-text {
   visibility: visible;
+  opacity: 1;
 }
