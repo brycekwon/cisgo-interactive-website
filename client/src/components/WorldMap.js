@@ -1,27 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Pin from './Pin.js'; // Assuming Pin component is defined in a separate file
 import '../static/css/components/WorldMap.css';
 
-class WorldMap extends React.Component {
-  render() {
-    const { experiences } = this.props;
+const WorldMap = () => {
+  const [experiences, setExperiences] = useState([]);
+  const [hoveredCountry, setHoveredCountry] = useState(null); // State to track hovered country
 
-    // Ensure experiences is not undefined before accessing its properties
-    if (!experiences) {
-      return null; // or render a loading indicator or handle the case appropriately
+  const countryPositions = {
+    "Japan": { x: 1710, y: 250 },
+    "Angola": { x:1000, y: 100 },
+    "China": { x: 1520, y: 260 },
+    "Argentina": { x: 660, y: 850},
+    "Brazil": { x: 1000, y: 100},
+    "France": { x: 990, y: 190},
+    "Czech Republic": { x: 1010, y: 190},
+    "El Salvador": { x: 477, y: 397},
+    "Greenland": { x: 820, y: 30},
+    "Indonesia": { x: 1680, y: 510},
+    "Mali": { x: 980, y: 300},
+    "Norway": { x: 1015, y: 100},
+    "Peru": { x: 500, y: 450},
+    "Philippines": { x: 1680, y: 450},
+    "Russia": { x: 1400, y: 95},
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API}/experiences`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch experiences');
+      }
+      const data = await response.json();
+      setExperiences(data);
+    } catch (error) {
+      console.error('Error fetching experiences:', error);
     }
+  };
 
-    const countryPositions = {
-      "Japan": { x: 1700, y: 300 },
-      "Angola": { x:1000, y: 100 },
-      "China": { x: 1700, y: 100 },
-    };
+  const getCountriesWithExperiences = () => {
+    const countriesWithExperiences = Object.keys(countryPositions).filter(country => {
+      return experiences.some(experience => experience.location.country === country);
+    });
+    return countriesWithExperiences;
+  };
 
-    const pins = Object.entries(countryPositions).map(([countryName, position]) => (
-      <Pin key={countryName} x={position.x} y={position.y} />
-    ));
-    
-    return (
+  const handlePinHover = (country) => {
+    setHoveredCountry(country);
+  };
+
+  const handlePinLeave = () => {
+    setHoveredCountry(null);
+  };
+
+  return (
       <div className="world_map">
         
         <svg id ="world_map" baseprofile="tiny" fill="#ececec" height="857" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" version="1.2" viewBox="0 0 2000 857" width="2000" xmlns="http://www.w3.org/2000/svg">
@@ -1555,12 +1590,20 @@ class WorldMap extends React.Component {
           </circle>
           <circle cx="1798.2" cy="719.3" id="2">
           </circle>
-          {pins}
-
+          {getCountriesWithExperiences().map((country, index) => (
+          <g
+            key={index}
+            onMouseEnter={() => handlePinHover(country)}
+            onMouseLeave={handlePinLeave}
+          >
+            <Pin x={countryPositions[country].x} y={countryPositions[country].y} />
+            {hoveredCountry === country && <text x={countryPositions[country].x} y={countryPositions[country].y} className="pin-tooltip">{country}</text>}
+          </g>
+        ))}
         </svg>
       </div>
     );
   }
-}
 
-export default WorldMap;
+
+export default React.memo(WorldMap);

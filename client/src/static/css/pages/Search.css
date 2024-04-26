@@ -1,32 +1,92 @@
-.app {
-  background-color: #a9bed2;
+.container{
+  height: 100vh;
+  background-color: #84aacd;
 }
 
 .app {
+  background-color: rgba(0, 0, 0, 0.23);
+  border-bottom: 5px solid white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding-top: 50px; /* Adjust as needed */
 }
+.search-options {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+   /* Adjust as needed */
+  height: 50px; /* Set a fixed height */
+}
+
+.search-bar input {
+  margin-left: 10px;
+  margin-right: 9px;
+  width: 615px;
+  padding: 10px;
+  border: 2px solid #edede0;
+  border-radius: 5px;
+  flex-grow: 1; /* Expand input to fill available space */
+  font-size: 16px;
+}
+
+.search-options select {
+  padding: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.search-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
 .search {
   padding: 10px;
   border: 2px solid #edede0;
   border-radius: 5px;
-  margin-bottom: 20px;
-  width: 300px; /* Adjust as needed */
+  margin-bottom: 10px;
+  flex-grow: 2; /* Expand to fill available space */
   font-size: 16px;
+  width: 100%; /* Set width to 100% */
 }
 
-.search::placeholder {
-  color: #6c757d;
+.submit-button {
+  padding: 10px 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  margin-right: 95px;
+}
+
+.submit-button:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
 }
 
 .box {
-
   background-color: #f8f7e9;
-
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 20px;
@@ -63,4 +123,13 @@
 .box p:last-child {
   color: #6c757d;
   font-size: 14px;
+}
+
+.expList{
+  background-color: #84aacd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
 }

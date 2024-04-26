@@ -46,6 +46,7 @@ const Home = () => {
     document.body.style.cursor = 'grabbing';
   };
 
+  // WITH DEBOUNCE TIME
   const handleMouseMove = debounce((e) => {
     if (!pointerDown || !ourRef.current) return;
     const currentPoint = getPoint(e);

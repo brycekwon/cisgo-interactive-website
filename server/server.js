@@ -46,9 +46,9 @@ app.use((err, req, res, next) => {
 async function main() {
   // connect to experiences database
   await mongoose
-    .connect(process.env.DATA_DB)
-    .then(() => console.log('Connected to data database'))
-    .catch((err) => console.log(err));
+  .connect(process.env.DATA_DB)
+  .then(() => console.log('Connected to data database'))
+  .catch((err) => console.log(err));
 
   // startup server
   const PORT = process.env.PORT || 5000;
