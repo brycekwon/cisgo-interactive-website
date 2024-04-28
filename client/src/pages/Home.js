@@ -212,7 +212,26 @@ const Home = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(experiences)
+  console.log(experiences);
+
+
+  const showExperiences = () =>{
+    let showContainer = document.getElementById('experiences_container');
+    let showButton = document.getElementById('show_button');
+    let hideButton = document.getElementById('hide_button');
+    showButton.style.display = "none";
+    hideButton.style.display = "block";
+    showContainer.style.display = "flex";
+  }
+
+  const hideExperiences = () =>{
+    let hideContainer = document.getElementById('experiences_container');
+    let showButton = document.getElementById('show_button');
+    let hideButton = document.getElementById('hide_button');
+    hideButton.style.display = "none";
+    showButton.style.display = "block";
+    hideContainer.style.display = 'none';
+  }
 
   return (
     <div className="body">
@@ -231,10 +250,11 @@ const Home = () => {
         <FilterBox />
       </div>
       <div className="bottom_container">
-        <div className="close_button_container">
-          <button className="close_button">Hide Experiences</button>
+        <div className="button_container">
+          <button id="show_button" onClick={showExperiences}></button>
+          <button id="hide_button" onClick={hideExperiences}></button>
         </div>
-        <div className="experiences_container">
+        <div id="experiences_container">
           {experiences.map((post, index) => (
             <div className="box" key={index}>
               <div>
