@@ -4,11 +4,11 @@ import '../static/css/pages/Help.css';
 
 const Help = () => {
   return (
-    <div className="help_container">
+    <div>
       <header className="title-header">
         <h1 className="title">Help Page</h1>
       </header>
-      <main class="help_content">
+      <main>
         <section className="help-section">
           <h2 className="subtitle">Pin Entry</h2>
           <p>
@@ -38,7 +38,7 @@ const Help = () => {
           <p>If you need further assistance, feel free to reach out here:</p>
         </section>
       </main>
-      <footer class="help_footer">
+      <footer>
         <p></p>
       </footer>
     </div>

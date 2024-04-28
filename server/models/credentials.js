@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 
 const schema = Schema({
-  username: String,   // plaintext username
-  password: String,   // bcrypt hexadecimal hash
+  email: String,
+  password: String, // base-16 hash
 });
 
 const authModel = model('credentials', schema);

@@ -1,6 +1,5 @@
-.help_container {
+div {
   background-color: #f4f4f4;
-  cursor: auto;
 }
 
 .title-header {
@@ -27,11 +26,11 @@
   color: #333;
 }
 
-.help_content {
+main {
   padding: 2rem;
 }
 
-.help_footer {
+footer {
   background-color: #333;
   color: #fff;
   text-align: center;

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+
 import NavBar from '../components/NavBar.js';
 import Popup from '../components/SearchPopup.js';
 import countryFlags from '../data/countryFlags.js';
+
 import '../static/css/pages/Search.css';
 
 const Search = () => {
@@ -10,8 +12,6 @@ const Search = () => {
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState("");
-  const [searchOptions, setSearchOptions] = useState([]);
-
   const getCountryFlag = (countryName) => {
     const trimmedCountryName = countryName.trim();
     return countryFlags[trimmedCountryName] || ''; 
@@ -27,81 +27,52 @@ const Search = () => {
 
   const handleSearch = async (event) => {
     event.preventDefault();
+    const formData = new FormData(event.target);
     setLoading(true);
     await fetch(`${process.env.REACT_APP_API}/experiences`, {
-      method: 'get',
+      method: "post",
       body: JSON.stringify({
-        "query": query,
+        "query": formData.get("query"),
       }),
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(async (res) => {
-      setExperiences(await res.json());
+      let data = await res.json();
+      setExperiences(data);
       setLoading(false);
     }).catch((err) => {
       console.log(err);
+      setError(err);
+      setLoading(false);
     });
-  };
-
-  const handleInputChange = (option, value) => {
-    // Handle input change for each search option
-  };
-
-  const addSearchBar = (option) => {
-    if (option !== "" && !searchOptions.includes(option)) {
-      setSearchOptions([...searchOptions, option]);
-    }
-  };
+  }
 
   if (loading) {
-    return (
-      <div>
-        <NavBar />
-        <div className="app">
-          <h1>Loading...</h1>
-        </div>
+    return <div>
+      <NavBar />
+      <div className="app">
+        <h1>Loading...</h1>
       </div>
-    );
+    </div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   return (
-    <div className="container">
-      <NavBar />
+    <div>
+      <NavBar /> {/* Ensure NavBar is rendered */}
       <div className="app">
-        <div className="search-options">
-          <select className="dropdown" onChange={(e) => addSearchBar(e.target.value)}>
-            <option value="">More Search Options</option>
-            <option value="name">Name</option>
-            <option value="email">Email</option>
-            <option value="description">Description</option>
-          </select>
-          <div className="search-bars">
-            <div className="search-bar">
-              <input
-                className="search"
-                placeholder='Search Location...'
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </div>
-            {searchOptions.map((option, index) => (
-              <div className="search-bar" key={index}>
-                <input
-                  className="search"
-                  placeholder={`Search ${option}...`}
-                  onChange={(event) => handleInputChange(option, event.target.value)}
-                />
-              </div>
-            ))}
-          </div>
-          <form onSubmit={handleSearch}>
-            <button type='submit' className="submit-button">Submit</button>
-          </form>
-        </div>
-      </div>
-      <div className="expList">
+        
+        <form onSubmit={handleSearch}>
+          <input name="query" placeholder='Search Location...'></input>
+          <button type='submit'>Submit</button>
+        </form>
         {experiences.map((post, index) => (
-          <div key={index} className="box" onClick={() => openPopup(post)}>
+        
+        <div className="box" key={index} onClick={() => openPopup(post)}>
             <div>
               <p>{post.name} ({post.email})</p>
               <p>{post.location.country}{post.location.city === null ? "" : ", " + post.location.city}</p>
@@ -115,6 +86,6 @@ const Search = () => {
       <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
     </div>
   );
-};
+}
 
 export default Search;
