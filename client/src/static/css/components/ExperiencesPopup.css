@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-.button_container{
+.close_button_container{
     background-color: rgba(0, 0, 0, 0.5);
     box-sizing: border-box;
     width: 100%;
@@ -15,51 +15,21 @@
     align-items: center;
 }
 
-#show_button::after{
-    font-family: cursive;
-    content: "Show Experiences";
-    text-align: center;
-    color: white;
-}
-
-#show_button{
+.close_button{
     width: 100%;
     background-color: rgba(0, 0, 0, 0);
-    padding: 5px;
+    color: white;
     transition-duration: 0.4s;
     cursor: pointer;
     border: none;
     font-size: 20px;
-    display: block;
 }
 
-#hide_button::after{
-    content: "Hide Experiences";
-    font-family: cursive;
-    text-align: center;
-    color: white;
-}
-
-#hide_button{
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0);
-    padding: 5px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    border: none;
-    font-size: 20px;
-    display: none;
-}
-
-#show_button:hover{
+.close_button:hover{
     background-color: rgba(0,0,0,0.7);
 }
 
-#hide_button:hover{
-    background-color: rgba(0,0,0,0.7);
-}
-
-#experiences_container {
+.experiences_container {
     box-sizing: border-box;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
@@ -67,7 +37,7 @@
     padding-left: 20px;
     padding-bottom: 20px;
     z-index: 1000;
-    display: none;
+    display: flex;
     cursor: auto;
     overflow: auto;
 }
@@ -77,6 +47,7 @@
     border-radius: 8px;
     padding: 10px;
     margin-right: 10px;
+    width: 50%;
     display: flex;
     justify-content: space-between;
     align-items: center;
