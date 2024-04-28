@@ -35,8 +35,6 @@ const Home = () => {
     return countryFlags[trimmedCountryName] || ''; 
   };
 
-  
-
   document.querySelectorAll(".allPaths").forEach(e=>{
   
     var country = document.getElementsByName(e.getAttribute('name'));
@@ -96,27 +94,6 @@ const Home = () => {
   const handleFilterMenu = () => {
     setFilterOpen(!filterOpen);
   }
-
-  // coordinates of the mouse's position
-  const coords = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  // view box position before scrolling
-  const oldViewBox = useRef({
-    x: 0,
-    y: 0,
-  });
-
-  // view box position after scrolling
-  const newViewBox = useRef({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0
-  });
-
   // returns a point (the coordinate of the user's click)
   const getPoint = (e) => {
     const point = { x: 0, y: 0 };
