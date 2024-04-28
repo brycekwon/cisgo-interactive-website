@@ -5,10 +5,10 @@ import '../static/css/pages/About.css';
 const About = () => {
   return (
     <div class='about_container'>
-      <header class='about_header'>
-        <h1 class='about_title'>About Us</h1>
-      </header>
       <main class='about_main'>
+        <header class='about_header'>
+          <h1 class='about_title'>About Us</h1>
+        </header>
         <p class='about_text'>
           This mapping project was conceived as a way to share the good work that UP faculty, staff, and alumni have 
           engaged in around the world. The map stores information about different projects, research, work and other 
@@ -17,6 +17,9 @@ const About = () => {
           See the CISGO website for information on all the activities of the Collaborative on International Studies and 
           Global Outreach.
         </p>
+        <div class='about_footer'>
+          <p>For more information, contact the site administrator at cisgomap@up.edu.</p>
+        </div>
       </main>
     </div>
   );

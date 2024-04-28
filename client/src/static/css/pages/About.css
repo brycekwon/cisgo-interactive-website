@@ -1,0 +1,31 @@
+.about_title{
+    text-align: center;
+    padding-bottom: 10px;
+    font-size: 50px;
+}
+
+.about_header{
+    background-color: yellow;
+    padding: 10px;
+}
+
+.about_main{
+    background-color: blue;
+    position: absolute;
+    height: 100%;
+    overflow: none;
+}
+
+.about_text{
+    padding: 20px;
+    line-height: 30px;
+}
+
+.about_footer{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: red;
+    color: white;
+    padding: 10px;
+}
