@@ -1,16 +1,18 @@
+
 .about_title{
     text-align: center;
     padding-bottom: 10px;
     font-size: 50px;
+    color: white;
 }
 
 .about_header{
-    background-color: yellow;
+    background-color: #a9bed2;
     padding: 10px;
 }
 
 .about_main{
-    background-color: blue;
+    background-color: white;
     position: absolute;
     height: 100%;
     overflow: none;
@@ -18,6 +20,10 @@
 
 .about_text{
     padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: justify;
     line-height: 30px;
 }
 
@@ -25,7 +31,8 @@
     position: fixed;
     width: 100%;
     bottom: 0;
-    background-color: red;
+    background-color: #a9bed2;
     color: white;
     padding: 10px;
+    font-size: 15px;
 }
