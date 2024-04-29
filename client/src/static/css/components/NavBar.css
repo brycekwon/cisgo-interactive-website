@@ -4,15 +4,28 @@
   padding: 0;
 }
 
+/* .navbar {
+  position: fixed;
+  top: 40px; 
+  bottom: 0; 
+  width: 250px;
+  background-color: rgba(0, 0, 0, 0.5); 
+  transition: transform 0.3s ease-in-out;
+  overflow-x: hidden; 
+} */
+
 .navbar {
   position: fixed;
-  top: 40px; /* Adjust top position */
-  bottom: 0; /* Set to the bottom */
+  top: 0;
+  left: 0;
   width: 250px;
-  background-color: rgba(0, 0, 0, 0.5); /* Adjust the background color */
+  height: 100vh; /* Set the height to 100% of the viewport height */
+  background-color: rgba(0, 0, 0, 0.5);
   transition: transform 0.3s ease-in-out;
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-y: auto; /* Allow scrolling within the navbar if content exceeds the viewport height */
+  z-index: 1000;
 }
+
 
 .expanded {
   transform: translateX(0);
@@ -30,7 +43,10 @@
   border: 1px solid #ccc;
   padding: 5px 10px;
   cursor: pointer;
+
+  z-index: 1010;
 }
+
 
 .navbar li a {
   display: block;
@@ -39,6 +55,7 @@
   padding: 20px 30px;
   text-decoration: none;
 }
+
 
 .navbar .dropdown-button {
   font-family: 'Times New Roman', serif;
@@ -98,3 +115,17 @@
   bottom: 10px;
   left: 10px;
 }
+
+.toggle-small {
+  padding: 1px; /* Reduce padding for a smaller button */
+  font-size: 5px; /* Smaller icon size */
+}
+
+.toggle-button i.material-icons {
+  font-size: 24px; /* Default icon size */
+}
+
+.toggle-small i.material-icons {
+  font-size: 12px; /* Smaller icon size when navbar is expanded */
+}
+
