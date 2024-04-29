@@ -28,14 +28,8 @@ const Search = () => {
   const handleSearch = async (event) => {
     event.preventDefault();
     setLoading(true);
-    await fetch(`${process.env.REACT_APP_API}/experiences`, {
+    await fetch(`${process.env.REACT_APP_API}/experiences?q=` + query, {
       method: 'get',
-      body: JSON.stringify({
-        "query": query,
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
     }).then(async (res) => {
       setExperiences(await res.json());
       setLoading(false);
