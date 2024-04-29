@@ -70,15 +70,8 @@ const Home = () => {
     const countrySelected = async (e) =>{
       const myName = countryName;
       e.preventDefault();
-      console.log(myName);
-      await fetch(`${process.env.REACT_APP_API}/experiences`, {
-      method: "post",
-      body: JSON.stringify({
-          "query": myName,
-      }),
-      headers: {
-          'Content-Type': 'application/json'
-      }
+      await fetch(`${process.env.REACT_APP_API}/experiences?q=` + myName, {
+      method: "get",
       }).then(async (res) => {
           let data = await res.json();
           setExperiences(data);
@@ -211,8 +204,6 @@ const Home = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
-  console.log(experiences);
 
 
   const showExperiences = () =>{
