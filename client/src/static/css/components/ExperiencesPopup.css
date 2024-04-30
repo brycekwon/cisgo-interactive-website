@@ -1,0 +1,95 @@
+.bottom_container{
+    bottom: 0px;
+    position: fixed;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.button_container{
+    background-color: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#show_button::after{
+    font-family: cursive;
+    content: "Show Experiences";
+    text-align: center;
+    color: white;
+}
+
+#show_button{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 5px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border: none;
+    font-size: 20px;
+    display: block;
+}
+
+#hide_button::after{
+    content: "Hide Experiences";
+    font-family: cursive;
+    text-align: center;
+    color: white;
+}
+
+#hide_button{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 5px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border: none;
+    font-size: 20px;
+    display: none;
+}
+
+#show_button:hover{
+    background-color: rgba(0,0,0,0.7);
+}
+
+#hide_button:hover{
+    background-color: rgba(0,0,0,0.7);
+}
+
+#experiences_container {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    z-index: 1000;
+    display: none;
+    cursor: auto;
+    overflow: auto;
+}
+
+.box{
+    background-color: #f8f7e9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: auto;
+}
+
+.country-flag-container{
+    margin-left: 20px;
+}
+
+.country-flag{
+    width: 65px; /* Adjust as needed */
+    height: auto; /* Let the height adjust proportionally */
+    object-fit: contain; /* This property ensures that the entire image fits inside the container */
+    cursor: auto;
+}
