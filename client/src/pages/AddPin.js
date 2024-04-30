@@ -2,6 +2,91 @@ import React, { useState } from 'react';
 import '../static/css/pages/AddPin.css';
 
 const AddPin = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    department: '',
+    country: '',
+    purpose: 'international work',
+    otherPurpose: '',
+    experience: '',
+    ongoing: false,
+    startDate: '',
+    endDate: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+  
+    if (name === 'ongoing') {
+      // Handle the ongoing checkbox separately
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: newValue,
+        // Remove end date when checking ongoing
+        endDate: newValue ? '' : prevFormData.endDate, // Only remove end date if ongoing is checked
+      }));
+    } else {
+      // Handle other form fields
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: newValue,
+      }));
+    }
+  };
+  
+  
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+  
+      const response = await fetch(`${process.env.REACT_APP_API}/experiences/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`, // Combine first and last name into one field
+          email: formData.email,
+          affiliation: formData.affiliation,
+          program: formData.program,
+          location: {
+            country: formData.country,
+            city: '', // Assuming city is not provided in the form
+          },
+          external: {
+            institutions: formData.institutions,
+            partnerships: formData.partnerships,
+          },
+          description: formData.description,
+          meta: {
+            isApproved: false, // Set the experience as not approved
+          },
+          duration: {
+            ongoing: formData.ongoing,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+          },
+        }),
+      });
+  
+      const responseData = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to add experience');
+      }
+  
+      // Handle success (e.g., redirect user, show success message)
+      console.log('Experience added successfully');
+    } catch (error) {
+      console.error('Error adding experience:', error.message);
+    }
+  };
+  
+  
   const [departments, setDepartments] = useState({
     Administration: false,
     Library: false,
@@ -50,8 +135,8 @@ const AddPin = () => {
   };
 
   const handleSuggestionClick = (country) => {
-    setSearchQuery(country); // Set the search query to the clicked suggestion
-    setShowSuggestions(false); // Close the suggestions
+    setSearchQuery(country);
+    setShowSuggestions(false);
   };
 
   const filteredCountries = countries.filter(country =>
@@ -60,22 +145,22 @@ const AddPin = () => {
 
   return (
     <div>
-      <header class="pin_header">
-        <h1 class="pin_title">Add a Pin to the map</h1>
+      <header className="pin_header">
+        <h1 className="pin_title">Add a Pin to the map</h1>
       </header>
-      <main class="pin_content">
-        <form action="/success" method="get" id="pin-form">
+      <main className="pin_content">
+        <form onSubmit={handleSubmit} action="/success" method="get" id="pin-form">
           <div className="form-group">
             <label htmlFor="first-name">First Name:</label>
-            <input type="text" id="first-name" name="first-name" required />
+            <input type="text" id="first-name" name="firstName" required onChange={handleChange} />
           </div>
           <div className="form-group">
             <label htmlFor="last-name">Last Name:</label>
-            <input type="text" id="last-name" name="last-name" required />
+            <input type="text" id="last-name" name="lastName" required onChange={handleChange} />
           </div>
           <div className="form-group">
             <label htmlFor="email">University of Portland Email:</label>
-            <input type="text" id="email" name="email" required />
+            <input type="text" id="email" name="email" required onChange={handleChange} />
           </div>
           <div className="form-group">
             <label>Department at University of Portland:</label>
@@ -93,7 +178,7 @@ const AddPin = () => {
           </div>
           <div className="form-group">
             <label htmlFor="location">Location:</label>
-            <input type="text" id="country-search" name="country-search" onChange={handleSearchChange} value={searchQuery} />
+            <input type="text" id="country-search" name="country" onChange={handleSearchChange} value={searchQuery} />
             {showSuggestions && (
               <div className="suggestions">
                 {filteredCountries.map((country, index) => (
@@ -106,27 +191,65 @@ const AddPin = () => {
           </div>
           <div className="form-group">
             <label htmlFor="purpose">What did you travel for?</label>
-            <select id="purpose" name="purpose" required>
+            <select id="purpose" name="purpose" required onChange={handleChange}>
               <option value="international work">International Work</option>
               <option value="volunteer work">Volunteer Work</option>
               <option value="study abroad">Study Abroad</option>
               <option value="other">Other</option>
             </select>
           </div>
-          <div className="form-group" id="other-purpose">
-            <label htmlFor="other-purpose-input">Please specify:</label>
-            <input type="text" id="other-purpose-input" name="other-purpose-input" />
+          {formData.purpose === 'other' && (
+            <div className="form-group" id="other-purpose">
+              <label htmlFor="other-purpose-input">Please specify:</label>
+              <input type="text" id="other-purpose-input" name="otherPurpose" onChange={handleChange} />
+            </div>
+          )}
+          
+          <div className="form-group">
+            <label htmlFor="affiliation">Affiliation:</label>
+            <input type="text" id="affiliation" name="affiliation" required onChange={handleChange} />
           </div>
           <div className="form-group">
-            <label htmlFor="experience">Tell us about your experience:</label>
-            <textarea id="experience" name="experience" rows="4" required></textarea>
+            <label htmlFor="program">Program:</label>
+            <input type="text" id="program" name="program" required onChange={handleChange} />
           </div>
-
+          <div className="form-group">
+            <label htmlFor="ongoing">Is the experience ongoing?</label>
+            <input type="checkbox" id="ongoing" name="ongoing" onChange={handleChange} />
+          </div>
+          <div>
+            {!formData.ongoing && (
+              <div className="form-group">
+                <label htmlFor="startDate">Start Date:</label>
+                <input type="text" id="startDate" name="startDate" placeholder="YYYY-MM" required onChange={handleChange} />
+              </div>
+            )}
+            {!formData.ongoing && (
+              <div className="form-group">
+                <label htmlFor="endDate">End Date:</label>
+                <input type="text" id="endDate" name="endDate" placeholder="YYYY-MM" required onChange={handleChange} />
+              </div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="institutions">External Institutions:</label>
+            <input type="text" id="institutions" name="institutions" onChange={handleChange} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="partnerships">External Partnerships:</label>
+            <input type="text" id="partnerships" name="partnerships" onChange={handleChange} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required onChange={handleChange}></textarea>
+          </div>
           <button type="submit">Submit</button>
         </form>
       </main>
     </div>
   );
+  
+  
 }
 
 export default AddPin;
