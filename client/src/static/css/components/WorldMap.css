@@ -1,7 +1,7 @@
 .world_map {
   background-color: rgb(0, 51, 102);
   height: 100vh;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .world_map svg path {

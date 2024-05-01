@@ -7,6 +7,7 @@ import { debounce } from 'lodash';
 import '../static/css/components/ExperiencesPopup.css';
 import countryFlags from '../data/countryFlags.js';
 
+
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
