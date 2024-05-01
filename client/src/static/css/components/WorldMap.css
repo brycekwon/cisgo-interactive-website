@@ -18,10 +18,6 @@
   cursor: pointer;
 }
 
-.world_map svg g text:hover{
-  user-select:none;
-}
-
 .allPaths:hover {
   fill: rgb(34, 59, 5);
 }

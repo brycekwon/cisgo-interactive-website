@@ -6,6 +6,7 @@ import FilterBox from '../components/FilterBox.js';
 import { debounce } from 'lodash';
 import '../static/css/components/ExperiencesPopup.css';
 import countryFlags from '../data/countryFlags.js';
+import Popup from '../components/SearchPopup.js';
 
 
 const Home = () => {
@@ -16,6 +17,7 @@ const Home = () => {
   const [pointerDown, setPointerDown] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [viewBoxValues, setViewBoxValues] = useState({ x: 0, y: 0, width: 2000, height: 857 });
+  const [selectedExperience, setSelectedExperience] = useState(null);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/experiences`)
@@ -197,7 +199,15 @@ const Home = () => {
     }).catch((err) => {
         console.log(err);
     });
-};
+  };
+
+  const openPopup = (experience) => {
+    setSelectedExperience(experience);
+  };
+
+  const closePopup = () => {
+    setSelectedExperience(null);
+  };
 
   return (
     <div className="body">
@@ -221,7 +231,7 @@ const Home = () => {
         </div>
         <div id="experiences_container">
           {experiences.map((post, index) => (
-            <div className="box" key={index}>
+            <div className="box" key={index} onClick={() => openPopup(post)}>
               <div>
                 <p>{post.name} ({post.email})</p>
                 <p>{post.location.country}{post.location.city === null ? "" : ", " + post.location.city}</p>
@@ -233,6 +243,7 @@ const Home = () => {
           ))}
         </div>
       </div>
+      <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
     </div>
   );
 };
