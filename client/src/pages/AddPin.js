@@ -251,7 +251,7 @@ const AddPin = () => {
             agency, NGO, university, religious organization, or corporation. Finally, our mapping precision may not 
             include small towns or rural villages in all countries. Be sure to specify the place you were during your 
             experience abroad.</p>
-            <textarea id="experience" name="experience" rows="4" required></textarea>
+            <textarea id="description" name="description" rows="4" required></textarea>
           </div>
           <button type="submit">Submit</button>
         </form>
