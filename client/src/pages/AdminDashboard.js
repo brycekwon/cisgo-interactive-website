@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import Popup from '../components/SearchPopup.js';
 import EditPopup from '../components/EditPopup.js';
 import '../static/css/pages/AdminDashboard.css';
+
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('All');
@@ -151,7 +153,7 @@ const AdminDashboard = () => {
       console.error('Error declining experience:', error);
     }
   };
-
+  
   return (
     <div className="admin-dashboard">
       <div className="dashboard-header">
@@ -160,8 +162,9 @@ const AdminDashboard = () => {
           <div className="user-icon dropdown">
             <button className="dropbtn"></button>
             <div className="user-dropdown dropdown-content">
-              <a href="/view-map">View Map</a>
-              <a href="/change-password">Change Password</a>
+              {/* Use Link to navigate to '/admin-home-view' */}
+              <Link to="/admin-home-view">View Map</Link>
+              <Link to="/change-password">Change Password</Link>
               <a href="/logout">Logout</a>
             </div>
           </div>
@@ -232,7 +235,6 @@ const AdminDashboard = () => {
       )}
     </div>
   );
-
 };
 
 export default AdminDashboard;
