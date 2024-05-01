@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../static/css/pages/AddPin.css';
-
+import '../components/NavBar.js';
+import NavBar from '../components/NavBar.js';
 const AddPin = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -153,6 +154,7 @@ const AddPin = () => {
 
   return (
     <div>
+      <NavBar /> 
       <header className="pin_header">
         <h1 className="pin_title">Add a Pin to the map</h1>
       </header>
