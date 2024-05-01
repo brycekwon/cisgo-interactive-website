@@ -35,7 +35,7 @@ const AddPin = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  /* const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch(`${process.env.REACT_APP_API}/experiences/add`, {
@@ -78,7 +78,7 @@ const AddPin = () => {
     } catch (error) {
       console.error('Error adding experience:', error.message);
     }
-  };
+  }; */
 
   const [departments, setDepartments] = useState({
     Administration: false,
@@ -159,7 +159,7 @@ const AddPin = () => {
         <h1 className="pin_title">Add a Pin to the map</h1>
       </header>
       <main className="pin_content">
-        <form onSubmit={handleSubmit} action="/success" method="get" id="pin-form">
+        <form action="/success" method="get" id="pin-form">
           <div className="form-group">
             <label htmlFor="first-name">First Name:</label>
             <input type="text" id="first-name" name="firstName" required onChange={handleChange} />
