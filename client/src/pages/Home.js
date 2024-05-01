@@ -187,6 +187,18 @@ const Home = () => {
     hideContainer.style.display = 'none';
   }
 
+  const handlePinClick = async (country) => {
+    console.log(country);
+    await fetch(`${process.env.REACT_APP_API}/experiences?q=` + country, {
+    method: "get",
+    }).then(async (res) => {
+        let data = await res.json();
+        setExperiences(data);
+    }).catch((err) => {
+        console.log(err);
+    });
+};
+
   return (
     <div className="body">
       <NavBar />
@@ -197,7 +209,7 @@ const Home = () => {
         onMouseLeave={handleMouseUpOrLeave}
         onMouseUp={handleMouseUpOrLeave}
       >
-        <WorldMap viewBox={`${viewBoxValues.x} ${viewBoxValues.y} ${viewBoxValues.width} ${viewBoxValues.height}`} experiences={experiences} />
+        <WorldMap viewBox={`${viewBoxValues.x} ${viewBoxValues.y} ${viewBoxValues.width} ${viewBoxValues.height}`} experiences={experiences} pinClick={handlePinClick}/>
       </div>
       <div className="toggle-filter-button" onClick={handleFilterMenu}>
         <FilterBox />

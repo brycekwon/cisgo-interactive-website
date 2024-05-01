@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import Home from '../pages/Home.js';
 import Pin from './Pin.js'; // Assuming Pin component is defined in a separate file
 import '../static/css/components/WorldMap.css';
 
-const WorldMap = ({ viewBox }) => {
+const WorldMap = ({ viewBox, pinClick }) => {
   const [experiences, setExperiences] = useState([]);
   const [hoveredCountry, setHoveredCountry] = useState(null); // State to track hovered country
 
@@ -1595,8 +1596,9 @@ const WorldMap = ({ viewBox }) => {
             key={index}
             onMouseEnter={() => handlePinHover(country)}
             onMouseLeave={handlePinLeave}
+            onMouseDown={() => pinClick(country)}
           >
-            <Pin x={countryPositions[country].x} y={countryPositions[country].y} />
+            <Pin country={country} x={countryPositions[country].x} y={countryPositions[country].y} />
             <text
               x={countryPositions[country].x + 9.5} // Adjust position to be centered
               y={countryPositions[country].y + 8} // Adjust position to be centered
