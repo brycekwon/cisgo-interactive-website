@@ -138,21 +138,30 @@ const AdminDashboard = () => {
 
   const handleApprove = async (experience) => {
     try {
+      // Ask for confirmation
+      const confirmed = window.confirm("Are you sure you want to approve this experience?");
+      if (!confirmed) return; // If user cancels, exit function
+  
       const updatedExperience = { ...experience, meta: { ...experience.meta, isApproved: true } };
       await updateExperience(updatedExperience);
     } catch (error) {
       console.error('Error approving experience:', error);
     }
   };
-
+  
   const handleDecline = async (experience) => {
     try {
+      // Ask for confirmation
+      const confirmed = window.confirm("Are you sure you want to decline this experience?");
+      if (!confirmed) return; // If user cancels, exit function
+  
       const updatedExperience = { ...experience, meta: { ...experience.meta, isApproved: false } };
       await updateExperience(updatedExperience);
     } catch (error) {
       console.error('Error declining experience:', error);
     }
   };
+  
   
   return (
     <div className="admin-dashboard">
