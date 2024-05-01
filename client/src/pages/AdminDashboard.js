@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Popup from '../components/SearchPopup.js';
+import EditPopup from '../components/EditPopup.js';
 import '../static/css/pages/AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -9,6 +10,7 @@ const AdminDashboard = () => {
   const [experiences, setExperiences] = useState([]);
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [editPopupOpen, setEditPopupOpen] = useState(false); // State variable for edit popup
 
   useEffect(() => {
     if (fetchDataFlag) {
@@ -51,11 +53,22 @@ const AdminDashboard = () => {
     setSelectedExperience(null);
   };
 
+  const handleEditClick = (experience) => {
+    setSelectedExperience(experience);
+    setEditPopupOpen(true);
+  };
+
+  const handleEditPopupClose = () => {
+    setEditPopupOpen(false); // Update editPopupOpen state to false
+    setSelectedExperience(null);
+  };
+  
+
   const handleAction = async (action, experience, event) => {
     try {
       switch (action) {
         case 'edit':
-          // Handle edit action
+          handleEditClick(experience);
           break;
         case 'hide':
           // Show confirmation popup
@@ -143,7 +156,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
-
+  
       <div className="sort-switch">
         <p>Sort By:</p>
         <select>
@@ -151,7 +164,7 @@ const AdminDashboard = () => {
           <option value="name" onClick={() => handleSortClick('Name')}>Name</option>
         </select>
       </div>
-
+  
       {/* Tabs */}
       <div className="dashboard-tabs">
         <div className={`tab ${activeTab === 'All' ? 'active active-top' : ''}`} onClick={() => handleTabClick('All')}>All</div>
@@ -161,7 +174,7 @@ const AdminDashboard = () => {
           <div className="unapproved-clickable" onClick={() => handleTabClick('Unapproved')}>Unapproved</div>
         </div>
       </div>
-
+  
       {/* Dashboard content */}
       <div className="dashboard-content-container">
         <div className="dashboard-content">
@@ -196,10 +209,19 @@ const AdminDashboard = () => {
           ))}
         </div>
       </div>
-
-      <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
+  
+      {selectedExperience && (
+      <>
+        {editPopupOpen ? (
+          <EditPopup isOpen={editPopupOpen} onClose={handleEditPopupClose} experience={selectedExperience} />
+        ) : (
+          <Popup isOpen={!editPopupOpen && selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
+        )}
+      </>
+    )}
     </div>
   );
+  
 };
 
 export default AdminDashboard;
