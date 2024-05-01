@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+
+
+import NavBar from '../components/NavBar.js';
 import '../static/css/pages/AddPin.css';
 
 const AddPin = () => {
@@ -145,8 +148,9 @@ const AddPin = () => {
 
   return (
     <div>
-      <header className="pin_header">
-        <h1 className="pin_title">Add a Pin to the map</h1>
+      <NavBar />
+      <header class="pin_header">
+        <h1 class="pin_title">Add a Pin to the map</h1>
       </header>
       <main className="pin_content">
         <form onSubmit={handleSubmit} action="/success" method="get" id="pin-form">
@@ -239,13 +243,24 @@ const AddPin = () => {
             <label htmlFor="partnerships">External Partnerships:</label>
             <input type="text" id="partnerships" name="partnerships" onChange={handleChange} />
           </div>
-          <div className="form-group">
-            <label htmlFor="description">Description:</label>
-            <textarea id="description" name="description" rows="4" required onChange={handleChange}></textarea>
+          <div class="form-group">
+            <label class="pin_labels" for="experience">Tell us about your experience:</label>
+            <p class="exp_desc">Please give a short summary of the experience or project you were involved in. 
+            Think about including what you did, why you did it, and briefly explaining outcomes? You might also 
+            include whether you were you working alone or with others, as well as with or for a particular government 
+            agency, NGO, university, religious organization, or corporation. Finally, our mapping precision may not 
+            include small towns or rural villages in all countries. Be sure to specify the place you were during your 
+            experience abroad.</p>
+            <textarea id="experience" name="experience" rows="4" required></textarea>
           </div>
           <button type="submit">Submit</button>
         </form>
       </main>
+      <footer class="pin_footer">
+        This information is on a secure server, and you can choose to share your email or keep it private. 
+        Only the administrator has access to the database. If you have additional questions about the form, 
+        please contact our administrator at cisgomap@up.edu.
+      </footer>
     </div>
   );
   

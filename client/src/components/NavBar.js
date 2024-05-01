@@ -50,12 +50,8 @@ const NavBar = () => {
           </li>
         </ul>
       </div>
-      <div className="toggle-button" onClick={handleToggleNavBar}>
-        {navbarOpen ? (
-          <i className="material-icons">close</i>
-        ) : (
-            <i className="material-icons">menu</i>
-          )}
+      <div className={`toggle-button ${navbarOpen ? 'toggle-small' : ''}`} onClick={handleToggleNavBar}>
+        <i className="material-icons">{navbarOpen ? 'close' : 'menu'}</i>
       </div>
     </div>
   );

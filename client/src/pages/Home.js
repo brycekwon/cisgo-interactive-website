@@ -4,6 +4,8 @@ import WorldMap from '../components/WorldMap.js';
 import NavBar from '../components/NavBar.js';
 import FilterBox from '../components/FilterBox.js';
 import { debounce } from 'lodash';
+import '../static/css/components/ExperiencesPopup.css';
+import countryFlags from '../data/countryFlags.js';
 
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
@@ -27,6 +29,65 @@ const Home = () => {
       });
   }, []);
 
+  const [error, setError] = useState(null);
+  const getCountryFlag = (countryName) => {
+    const trimmedCountryName = countryName.trim();
+    return countryFlags[trimmedCountryName] || ''; 
+  };
+
+  document.querySelectorAll(".allPaths").forEach(e=>{
+  
+    var country = document.getElementsByName(e.getAttribute('name'));
+    var countryName = e.getAttribute('name')
+   
+    // function to detect if a user is hovering over a country
+    function hovering(){
+      // changes country color if hovering
+      country.forEach(function(item){
+        item.style.fill = "rgb(34, 59, 5)";
+        item.style.transition = "0.2s";
+        item.style.cursor = "pointer";
+      })
+    }
+    // event listeners for hovering over countries
+    e.addEventListener("mouseover", hovering);
+
+    // resets country color after no longer hovering
+    function out(){
+      country.forEach(function(item){
+        item.style.fill = "rgb(56, 78, 29)";
+        item.style.stroke = "rgb(34, 59, 5)"
+        item.style.strokeWidth = "1";
+        item.style.transition = "0.2s";
+        item.style.cursor = "grab";
+      })
+    }
+
+    // event listener when user stops hovering over a country
+    e.addEventListener("mouseout", out);
+
+    // for country on-click
+    const countrySelected = async (e) =>{
+      const myName = countryName;
+      e.preventDefault();
+      await fetch(`${process.env.REACT_APP_API}/experiences?q=` + myName, {
+      method: "get",
+      }).then(async (res) => {
+          let data = await res.json();
+          setExperiences(data);
+      }).catch((err) => {
+          console.log(err);
+          setError(err);
+      });
+    }
+
+    e.addEventListener("click", countrySelected);
+
+  })
+  const handleFilterMenu = () => {
+    setFilterOpen(!filterOpen);
+  }
+  // returns a point (the coordinate of the user's click)
   const getPoint = (e) => {
     const point = { x: 0, y: 0 };
     if (e.targetTouches) {
@@ -106,6 +167,25 @@ const Home = () => {
     return <div>Loading...</div>;
   }
 
+
+  const showExperiences = () =>{
+    let showContainer = document.getElementById('experiences_container');
+    let showButton = document.getElementById('show_button');
+    let hideButton = document.getElementById('hide_button');
+    showButton.style.display = "none";
+    hideButton.style.display = "block";
+    showContainer.style.display = "flex";
+  }
+
+  const hideExperiences = () =>{
+    let hideContainer = document.getElementById('experiences_container');
+    let showButton = document.getElementById('show_button');
+    let hideButton = document.getElementById('hide_button');
+    hideButton.style.display = "none";
+    showButton.style.display = "block";
+    hideContainer.style.display = 'none';
+  }
+
   return (
     <div className="body">
       <NavBar />
@@ -118,8 +198,27 @@ const Home = () => {
       >
         <WorldMap viewBox={`${viewBoxValues.x} ${viewBoxValues.y} ${viewBoxValues.width} ${viewBoxValues.height}`} experiences={experiences} />
       </div>
-      <div className="toggle-filter-button" onClick={() => setFilterOpen(!filterOpen)}>
-        <FilterBox open={filterOpen} />
+      <div className="toggle-filter-button" onClick={handleFilterMenu}>
+        <FilterBox />
+      </div>
+      <div className="bottom_container">
+        <div className="button_container">
+          <button id="show_button" onClick={showExperiences}></button>
+          <button id="hide_button" onClick={hideExperiences}></button>
+        </div>
+        <div id="experiences_container">
+          {experiences.map((post, index) => (
+            <div className="box" key={index}>
+              <div>
+                <p>{post.name} ({post.email})</p>
+                <p>{post.location.country}{post.location.city === null ? "" : ", " + post.location.city}</p>
+              </div>
+              <div className="country-flag-container">
+                <img src={getCountryFlag(post.location.country)} alt="Country Flag" className="country-flag" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
