@@ -12,7 +12,6 @@ experiencesRouter.get('/people', controller.getAllExperiences);
 experiencesRouter.get('/:id', cache('5 minutes'), controller.getExperience);
 
 experiencesRouter.put('/add', controller.addExperience);
-experiencesRouter.put('/:id', verifyToken, controller.editExperience);
 
 export default experiencesRouter;
  

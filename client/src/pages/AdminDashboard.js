@@ -77,7 +77,7 @@ const AdminDashboard = () => {
             await updateExperience(updatedExperienceHide);
             // Remove the hidden experience from the list if the active tab is not 'Hidden'
             if (activeTab !== 'Hidden') {
-              setExperiences(prevExperiences => prevExperiences.filter(exp => exp.id !== updatedExperienceHide.id));
+              setExperiences(prevExperiences => prevExperiences.filter(exp => exp._id !== updatedExperienceHide._id));
             }
           }
           break;
@@ -101,26 +101,27 @@ const AdminDashboard = () => {
       // Handle error if needed
     }
   };
-  
 
   const updateExperience = async (updatedExperience) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API}/experiences/${updatedExperience.id}`, {
-        method: 'PUT', // Use PUT method for updating
+      const response = await fetch(`${process.env.REACT_APP_API}/experiences/${updatedExperience._id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedExperience),
       });
   
+      const responseData = await response.json();
+  
       if (!response.ok) {
-        throw new Error('Failed to update experience');
+        throw new Error(responseData.message || 'Failed to update experience');
       }
   
       // Update the experience list in the state
       setExperiences(prevExperiences => {
         return prevExperiences.map(exp => {
-          if (exp.id === updatedExperience.id) {
+          if (exp._id === updatedExperience._id) {
             return updatedExperience;
           }
           return exp;
@@ -132,8 +133,6 @@ const AdminDashboard = () => {
     }
   };
   
-  
-  
 
   const handleApprove = async (experience) => {
     try {
@@ -141,19 +140,15 @@ const AdminDashboard = () => {
       await updateExperience(updatedExperience);
     } catch (error) {
       console.error('Error approving experience:', error);
-      // Handle error if needed
     }
   };
-  
 
   const handleDecline = async (experience) => {
     try {
-      // Update experience's approval status
       const updatedExperience = { ...experience, meta: { ...experience.meta, isApproved: false } };
       await updateExperience(updatedExperience);
     } catch (error) {
       console.error('Error declining experience:', error);
-      // Handle error if needed
     }
   };
 
