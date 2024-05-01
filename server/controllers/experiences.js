@@ -142,6 +142,7 @@ export const addExperience = asyncHandler(async (req, res) => {
   });
 });
 
+
 /**
  * Edit existing entry in experiences database by ID
  * TODO: checks before saving into database
@@ -151,27 +152,36 @@ export const addExperience = asyncHandler(async (req, res) => {
  * @param {Express.Response} res
  */
 export const editExperience = asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  if (!id || !isValidObjectId(id)) {
-    return res.status(400).json({
-      message: 'Invalid request',
+   const id = req.params.id;
+   if (!id || !isValidObjectId(id)) {
+     return res.status(400).json({
+       message: 'Invalid request',
     });
-  }
+  } 
 
-  if (!isValidExperience(req.body)) {
-    return res.status(400).json({
-      message: 'Invalid request',
+  try {
+    const existingExperience = await experienceModel.findById(id);
+    if (!existingExperience) {
+      return res.status(404).json({
+        message: 'Experience not found',
+      });
+    }
+
+    // Update only the specific properties of the experience
+    const { meta, ...updatedProperties } = req.body; // Extract updated properties
+    existingExperience.set(updatedProperties); // Update existingExperience with the new properties
+
+    // Save the updated experience to the database
+    const updatedExperience = await existingExperience.save();
+
+    return res.status(200).json({
+      message: 'Experience updated',
+      experience: updatedExperience,
     });
-  }
-
-  const status = await experienceModel.findByIdAndUpdate(id, req.body);
-  if (!status) {
+  } catch (error) {
+    console.error('Error updating experience:', error);
     return res.status(500).json({
-      message: 'Could not save entry',
+      message: 'Internal server error',
     });
   }
-
-  return res.status(200).json({
-    message: 'Entry updated',
-  });
 });

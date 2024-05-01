@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import Popup from '../components/SearchPopup.js';
 import EditPopup from '../components/EditPopup.js';
 import '../static/css/pages/AdminDashboard.css';
+
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('All');
@@ -41,9 +43,9 @@ const AdminDashboard = () => {
   };
 
   const handleSortClick = (option) => {
-    setActiveSort(option)
+    setActiveSort(option);
     setFetchDataFlag(true);
-  }
+  };
 
   const openPopup = (experience) => {
     setSelectedExperience(experience);
@@ -62,9 +64,8 @@ const AdminDashboard = () => {
     setEditPopupOpen(false); // Update editPopupOpen state to false
     setSelectedExperience(null);
   };
-  
 
-  const handleAction = async (action, experience, event) => {
+  const handleAction = async (action, experience) => {
     try {
       switch (action) {
         case 'edit':
@@ -74,46 +75,24 @@ const AdminDashboard = () => {
           // Show confirmation popup
           const hideConfirmed = window.confirm("Are you sure you want to hide?");
           if (hideConfirmed) {
-            event.stopPropagation(); // Stop event propagation to avoid triggering the popup
             const updatedExperienceHide = { ...experience, meta: { ...experience.meta, isVisible: false } };
-            await fetch(`${process.env.REACT_APP_API}/experiences/${experience.id}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(updatedExperienceHide),
-            });
-            // Update the experience list in the state
-            const updatedExperiencesHide = experiences.map(exp => {
-              if (exp.id === experience.id) {
-                return updatedExperienceHide;
-              }
-              return exp;
-            });
-            setExperiences(updatedExperiencesHide); // Update experiences state with the updated experience
+            await updateExperience(updatedExperienceHide);
+            // Remove the hidden experience from the list if the active tab is not 'Hidden'
+            if (activeTab !== 'Hidden') {
+              setExperiences(prevExperiences => prevExperiences.filter(exp => exp._id !== updatedExperienceHide._id));
+            }
           }
           break;
         case 'unhide':
           // Show confirmation popup
           const unhideConfirmed = window.confirm("Are you sure you want to unhide?");
           if (unhideConfirmed) {
-            event.stopPropagation(); // Stop event propagation to avoid triggering the popup
             const updatedExperienceUnhide = { ...experience, meta: { ...experience.meta, isVisible: true } };
-            await fetch(`${process.env.REACT_APP_API}/experiences/${experience.id}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(updatedExperienceUnhide),
-            });
-            // Update the experience list in the state
-            const updatedExperiencesUnhide = experiences.map(exp => {
-              if (exp.id === experience.id) {
-                return updatedExperienceUnhide;
-              }
-              return exp;
-            });
-            setExperiences(updatedExperiencesUnhide); // Update experiences state with the updated experience
+            await updateExperience(updatedExperienceUnhide);
+            // Add the unhidden experience to the list if the active tab is 'Hidden'
+            if (activeTab === 'Hidden') {
+              setExperiences(prevExperiences => [...prevExperiences, updatedExperienceUnhide]);
+            }
           }
           break;
         default:
@@ -125,22 +104,65 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleApprove = (experience) => {
-    // Show confirmation popup
-    const isConfirmed = window.confirm("Are you sure you want to approve?");
-    if (isConfirmed) {
-      // Call function to approve
+  const updateExperience = async (updatedExperience) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API}/experiences/${updatedExperience._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedExperience),
+      });
+  
+      const responseData = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to update experience');
+      }
+  
+      // Update the experience list in the state
+      setExperiences(prevExperiences => {
+        return prevExperiences.map(exp => {
+          if (exp._id === updatedExperience._id) {
+            return updatedExperience;
+          }
+          return exp;
+        });
+      });
+    } catch (error) {
+      console.error('Error updating experience:', error);
+      // Handle error if needed
     }
   };
+  
 
-  const handleDecline = (experience) => {
-    // Show confirmation popup
-    const isConfirmed = window.confirm("Are you sure you want to decline?");
-    if (isConfirmed) {
-      // Call function to decline
+  const handleApprove = async (experience) => {
+    try {
+      // Ask for confirmation
+      const confirmed = window.confirm("Are you sure you want to approve this experience?");
+      if (!confirmed) return; // If user cancels, exit function
+  
+      const updatedExperience = { ...experience, meta: { ...experience.meta, isApproved: true } };
+      await updateExperience(updatedExperience);
+    } catch (error) {
+      console.error('Error approving experience:', error);
     }
   };
-
+  
+  const handleDecline = async (experience) => {
+    try {
+      // Ask for confirmation
+      const confirmed = window.confirm("Are you sure you want to decline this experience?");
+      if (!confirmed) return; // If user cancels, exit function
+  
+      const updatedExperience = { ...experience, meta: { ...experience.meta, isApproved: false } };
+      await updateExperience(updatedExperience);
+    } catch (error) {
+      console.error('Error declining experience:', error);
+    }
+  };
+  
+  
   return (
     <div className="admin-dashboard">
       <div className="dashboard-header">
@@ -149,22 +171,23 @@ const AdminDashboard = () => {
           <div className="user-icon dropdown">
             <button className="dropbtn"></button>
             <div className="user-dropdown dropdown-content">
-              <a href="/view-map">View Map</a>
-              <a href="/change-password">Change Password</a>
+              {/* Use Link to navigate to '/admin-home-view' */}
+              <Link to="/admin-home-view">View Map</Link>
+              <Link to="/change-password">Change Password</Link>
               <a href="/logout">Logout</a>
             </div>
           </div>
         </div>
       </div>
-  
+
       <div className="sort-switch">
         <p>Sort By:</p>
-        <select>
-          <option value="country" onClick={() => handleSortClick('Country')}>Country</option>
-          <option value="name" onClick={() => handleSortClick('Name')}>Name</option>
+        <select onChange={(e) => handleSortClick(e.target.value)}>
+          <option value="Country">Country</option>
+          <option value="Name">Name</option>
         </select>
       </div>
-  
+
       {/* Tabs */}
       <div className="dashboard-tabs">
         <div className={`tab ${activeTab === 'All' ? 'active active-top' : ''}`} onClick={() => handleTabClick('All')}>All</div>
@@ -174,7 +197,7 @@ const AdminDashboard = () => {
           <div className="unapproved-clickable" onClick={() => handleTabClick('Unapproved')}>Unapproved</div>
         </div>
       </div>
-  
+
       {/* Dashboard content */}
       <div className="dashboard-content-container">
         <div className="dashboard-content">
@@ -209,19 +232,18 @@ const AdminDashboard = () => {
           ))}
         </div>
       </div>
-  
+
       {selectedExperience && (
-      <>
-        {editPopupOpen ? (
-          <EditPopup isOpen={editPopupOpen} onClose={handleEditPopupClose} experience={selectedExperience} />
-        ) : (
-          <Popup isOpen={!editPopupOpen && selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
-        )}
-      </>
-    )}
+        <>
+          {editPopupOpen ? (
+            <EditPopup isOpen={editPopupOpen} onClose={handleEditPopupClose} experience={selectedExperience} />
+          ) : (
+            <Popup isOpen={!editPopupOpen && selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
+          )}
+        </>
+      )}
     </div>
   );
-  
 };
 
 export default AdminDashboard;

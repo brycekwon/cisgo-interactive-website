@@ -20,6 +20,8 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     req.user = decoded.username;
     next();
   });
+
+  next();
 });
 
 export default verifyToken;
