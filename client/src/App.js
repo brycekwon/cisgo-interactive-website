@@ -1,25 +1,25 @@
-import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// App.js
 
-import "./static/css/global.css"
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import './static/css/global.css';
 
 const Main = lazy(() => import('./layouts/Main.js'));
-
 const Home = lazy(() => import('./pages/Home.js'));
-const AddPin = lazy(() => import("./pages/AddPin.js"));
+const AddPin = lazy(() => import('./pages/AddPin.js'));
 const Search = lazy(() => import('./pages/Search.js'));
-
 const Contact = lazy(() => import('./pages/Contact.js'));
 const About = lazy(() => import('./pages/About.js'));
 const Help = lazy(() => import('./pages/Help.js'));
-
 const AdminLogin = lazy(() => import('./pages/AdminLogin.js'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard.js'));
-
+const AdminHomeView = lazy(() => import('./pages/AdminHomeView.js'));
+const ChangePassword = lazy(() => import('./pages/ChangePassword.js'));
 const NotFound = lazy(() => import('./pages/NotFound.js'));
 
 const App = () => {
-  return(
+  return (
     <BrowserRouter>
       <Suspense fallback={<Main />}>
         <Routes>
@@ -31,6 +31,8 @@ const App = () => {
           <Route path="/help" element={<Help />} />
           <Route path="/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin-home-view" element={<AdminHomeView />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

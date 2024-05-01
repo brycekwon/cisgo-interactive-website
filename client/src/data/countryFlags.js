@@ -38,6 +38,14 @@ const countryFlags = {
   "Kazakhstan": "https://www.worldometers.info/img/flags/small/tn_kz-flag.gif",
   "Pakistan": "https://www.worldometers.info/img/flags/small/tn_pk-flag.gif",
   "Ireland": "https://www.worldometers.info/img/flags/small/tn_ei-flag.gif",
+  "Yemen": "https://www.worldometers.info/img/flags/ym-flag.gif",
+  "El Salvador": "https://www.worldometers.info/img/flags/es-flag.gif",
+  "Peru": "https://www.worldometers.info/img/flags/pe-flag.gif",
+  "Japan": "https://www.worldometers.info/img/flags/ja-flag.gif",
+  "Greenland": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1OqKDMoxU6Fn2y8ZaUCKdXf66ynWxDkzzbhlulaelOg&s",
+  "Thailand": "https://www.worldometers.info/img/flags/small/tn_th-flag.gif",
+  "Norway": "https://www.worldometers.info/img/flags/small/tn_no-flag.gif",
+
 }
 
 export default countryFlags;

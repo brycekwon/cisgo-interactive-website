@@ -1,0 +1,24 @@
+.pin-container {
+    position: absolute;
+  }
+  
+  .pin-image {
+    width: 20px;
+    height: 20px;
+  }
+  /* WorldMap.css */
+
+.pin-tooltip {
+    font-size: 12px;
+    fill: #fff; /* Text color */
+    background-color: rgba(0, 0, 0, 0.7); /* Background color */
+    padding: 5px;
+    border-radius: 5px;
+    pointer-events: none; /* Ensures the tooltip doesn't interfere with mouse events */
+    visibility: hidden;
+  }
+  
+  .g:hover .pin-tooltip {
+    visibility: visible;
+  }
+  

@@ -6,15 +6,18 @@ import FilterBox from '../components/FilterBox.js';
 import { debounce } from 'lodash';
 import '../static/css/components/ExperiencesPopup.css';
 import countryFlags from '../data/countryFlags.js';
+import Popup from '../components/SearchPopup.js';
+
 
 const Home = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const ourRef = useRef(null);
-  const coords = useRef({ x: 0, y: 0 }); // Define coords here
+  const coords = useRef({ x: 0, y: 0 });
   const [pointerDown, setPointerDown] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [viewBoxValues, setViewBoxValues] = useState({ x: 0, y: 0, width: 2000, height: 857 });
+  const [selectedExperience, setSelectedExperience] = useState(null);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API}/experiences`)
@@ -98,11 +101,11 @@ const Home = () => {
       point.y = e.clientY;
     }
     return point;
-
   };
+
   const handleMouseDown = (e) => {
     const point = getPoint(e);
-    coords.current = point; // Use coords ref here
+    coords.current = point;
     setPointerDown(true);
     document.body.style.cursor = 'grabbing';
   };
@@ -113,64 +116,26 @@ const Home = () => {
     const currentPoint = getPoint(e);
     const dx = currentPoint.x - coords.current.x;
     const dy = currentPoint.y - coords.current.y;
-  
-    // Calculate new potential view box values based on the drag movement
+
     let newX = viewBoxValues.x - dx;
     let newY = viewBoxValues.y - dy;
-  
-    // Define the boundaries for panning
-    const minX = -100; // Example minimum x value
-    const maxX = 1000; // Example maximum x value (adjust based on your map's size)
-    const minY = -100; // Example minimum y value
-    const maxY = 500; // Example maximum y value (adjust based on your map's size)
-  
-    // Apply constraints to the new view box values to ensure they're within boundaries
+
+    const minX = -100;
+    const maxX = 1000;
+    const minY = -100;
+    const maxY = 500;
+
     newX = Math.max(minX, Math.min(newX, maxX));
     newY = Math.max(minY, Math.min(newY, maxY));
-  
-    // Update state to move the view box within the allowed boundaries
+
     setViewBoxValues(prevValues => ({
       ...prevValues,
       x: newX,
       y: newY
     }));
-  
-    // Update the start point for the next move
+
     coords.current = currentPoint;
   }, 16);
-  
-  // // WITHOUT DEBOUNCE TIME
-  // const handleMouseMove = (e) => {
-  //   if (!pointerDown || !ourRef.current) return;
-  //   const currentPoint = getPoint(e);
-  //   const dx = currentPoint.x - coords.current.x;
-  //   const dy = currentPoint.y - coords.current.y;
-  
-  //   // Calculate new potential view box values based on the drag movement
-  //   let newX = viewBoxValues.x - dx;
-  //   let newY = viewBoxValues.y - dy;
-  
-  //   // Define the boundaries for panning
-  //   const minX = -100; // Example minimum x value
-  //   const maxX = 1000; // Example maximum x value (adjust based on your map's size)
-  //   const minY = -100; // Example minimum y value
-  //   const maxY = 500; // Example maximum y value (adjust based on your map's size)
-  
-  //   // Apply constraints to the new view box values to ensure they're within boundaries
-  //   newX = Math.max(minX, Math.min(newX, maxX));
-  //   newY = Math.max(minY, Math.min(newY, maxY));
-  
-  //   // Update state to move the view box within the allowed boundaries
-  //   setViewBoxValues(prevValues => ({
-  //     ...prevValues,
-  //     x: newX,
-  //     y: newY
-  //   }));
-  
-  //   // Update the start point for the next move
-  //   coords.current = currentPoint;
-  // };
-  
 
   const handleMouseUpOrLeave = () => {
     setPointerDown(false);
@@ -181,11 +146,11 @@ const Home = () => {
     const paths = document.querySelectorAll('.allPaths');
 
     const handleMouseOver = e => {
-      e.target.style.fill = 'rgb(34, 59, 5)';;  
+      e.target.style.fill = 'rgb(34, 59, 5)';
     };
 
     const handleMouseOut = e => {
-      e.target.style.fill = '';  // Reset to default or specific fill color
+      e.target.style.fill = '';
     };
 
     paths.forEach(path => {
@@ -199,7 +164,7 @@ const Home = () => {
         path.removeEventListener('mouseout', handleMouseOut);
       });
     };
-  }, []);  // Dependency array left empty to run effect only once on mount
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -224,18 +189,37 @@ const Home = () => {
     hideContainer.style.display = 'none';
   }
 
+  const handlePinClick = async (country) => {
+    console.log(country);
+    await fetch(`${process.env.REACT_APP_API}/experiences?q=` + country, {
+    method: "get",
+    }).then(async (res) => {
+        let data = await res.json();
+        setExperiences(data);
+    }).catch((err) => {
+        console.log(err);
+    });
+  };
+
+  const openPopup = (experience) => {
+    setSelectedExperience(experience);
+  };
+
+  const closePopup = () => {
+    setSelectedExperience(null);
+  };
+
   return (
     <div className="body">
       <NavBar />
-      <div 
-        ref={ourRef} 
-        onMouseDown={handleMouseDown} 
-        onMouseMove={handleMouseMove} 
-        onMouseLeave={handleMouseUpOrLeave} 
+      <div
+        ref={ourRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseUpOrLeave}
         onMouseUp={handleMouseUpOrLeave}
       >
-        {/* Updated to use the correct variable for viewBox */}
-        <WorldMap viewBox={`${viewBoxValues.x} ${viewBoxValues.y} ${viewBoxValues.width} ${viewBoxValues.height}`} />
+        <WorldMap viewBox={`${viewBoxValues.x} ${viewBoxValues.y} ${viewBoxValues.width} ${viewBoxValues.height}`} experiences={experiences} pinClick={handlePinClick}/>
       </div>
       <div className="toggle-filter-button" onClick={handleFilterMenu}>
         <FilterBox />
@@ -247,7 +231,7 @@ const Home = () => {
         </div>
         <div id="experiences_container">
           {experiences.map((post, index) => (
-            <div className="box" key={index}>
+            <div className="box" key={index} onClick={() => openPopup(post)}>
               <div>
                 <p>{post.name} ({post.email})</p>
                 <p>{post.location.country}{post.location.city === null ? "" : ", " + post.location.city}</p>
@@ -259,6 +243,7 @@ const Home = () => {
           ))}
         </div>
       </div>
+      <Popup isOpen={selectedExperience !== null} onClose={closePopup} experience={selectedExperience} />
     </div>
   );
 };
