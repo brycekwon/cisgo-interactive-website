@@ -1,8 +1,4 @@
-
 import React, { useState } from 'react';
-
-import NavBar from '../components/NavBar.js';
-
 import '../static/css/pages/AddPin.css';
 
 const AddPin = () => {
@@ -10,7 +6,7 @@ const AddPin = () => {
     firstName: '',
     lastName: '',
     email: '',
-    department: '',
+    department: [],
     country: '',
     purpose: 'international work',
     otherPurpose: '',
@@ -23,43 +19,37 @@ const AddPin = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? checked : value;
-  
+
     if (name === 'ongoing') {
-      // Handle the ongoing checkbox separately
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: newValue,
-        // Remove end date when checking ongoing
-        endDate: newValue ? '' : prevFormData.endDate, // Only remove end date if ongoing is checked
+        endDate: newValue ? '' : prevFormData.endDate,
       }));
     } else {
-      // Handle other form fields
       setFormData((prevFormData) => ({
         ...prevFormData,
         [name]: newValue,
       }));
     }
   };
-  
-  
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-  
       const response = await fetch(`${process.env.REACT_APP_API}/experiences/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: `${formData.firstName} ${formData.lastName}`, // Combine first and last name into one field
+          name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
-          affiliation: formData.affiliation,
-          program: formData.program,
+          affiliation: formData.department.join(', '), // Sending selected departments as affiliation
+          program: formData.purpose === 'other' ? formData.otherPurpose : formData.purpose, // Sending otherPurpose if purpose is 'other'
           location: {
             country: formData.country,
-            city: '', // Assuming city is not provided in the form
+            city: '',
           },
           external: {
             institutions: formData.institutions,
@@ -67,7 +57,7 @@ const AddPin = () => {
           },
           description: formData.description,
           meta: {
-            isApproved: false, // Set the experience as not approved
+            isApproved: false,
           },
           duration: {
             ongoing: formData.ongoing,
@@ -76,21 +66,19 @@ const AddPin = () => {
           },
         }),
       });
-  
+
       const responseData = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(responseData.message || 'Failed to add experience');
       }
-  
-      // Handle success (e.g., redirect user, show success message)
+
       console.log('Experience added successfully');
     } catch (error) {
       console.error('Error adding experience:', error.message);
     }
   };
-  
-  
+
   const [departments, setDepartments] = useState({
     Administration: false,
     Library: false,
@@ -131,6 +119,10 @@ const AddPin = () => {
       ...departments,
       [department]: !departments[department],
     });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      department: departments[department] ? prevFormData.department.filter((dep) => dep !== department) : [...prevFormData.department, department],
+    }));
   };
 
   const handleSearchChange = (event) => {
@@ -141,9 +133,21 @@ const AddPin = () => {
   const handleSuggestionClick = (country) => {
     setSearchQuery(country);
     setShowSuggestions(false);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      country: country,
+    }));
   };
 
-  const filteredCountries = countries.filter(country =>
+  const handleCountryChange = (event) => {
+    setSearchQuery(event.target.value);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      country: event.target.value,
+    }));
+  };
+
+  const filteredCountries = countries.filter((country) =>
     country.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
 
@@ -175,14 +179,22 @@ const AddPin = () => {
                     type="checkbox"
                     checked={departments[department]}
                     onChange={() => handleDepartmentChange(department)}
-                  /> {department}
+                  />{' '}
+                  {department}
                 </div>
               ))}
             </div>
           </div>
           <div className="form-group">
             <label htmlFor="location">Location:</label>
-            <input type="text" id="country-search" name="country" onChange={handleSearchChange} value={searchQuery} />
+            <input
+              type="text"
+              id="country-search"
+              name="country"
+              onChange={handleSearchChange}
+              value={searchQuery}
+              onBlur={handleCountryChange}
+            />
             {showSuggestions && (
               <div className="suggestions">
                 {filteredCountries.map((country, index) => (
@@ -208,15 +220,6 @@ const AddPin = () => {
               <input type="text" id="other-purpose-input" name="otherPurpose" onChange={handleChange} />
             </div>
           )}
-          
-          <div className="form-group">
-            <label htmlFor="affiliation">Affiliation:</label>
-            <input type="text" id="affiliation" name="affiliation" required onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label htmlFor="program">Program:</label>
-            <input type="text" id="program" name="program" required onChange={handleChange} />
-          </div>
           <div className="form-group">
             <label htmlFor="ongoing">Is the experience ongoing?</label>
             <input type="checkbox" id="ongoing" name="ongoing" onChange={handleChange} />
@@ -243,28 +246,20 @@ const AddPin = () => {
             <label htmlFor="partnerships">External Partnerships:</label>
             <input type="text" id="partnerships" name="partnerships" onChange={handleChange} />
           </div>
-          <div class="form-group">
-            <label class="pin_labels" for="experience">Tell us about your experience:</label>
-            <p class="exp_desc">Please give a short summary of the experience or project you were involved in. 
-            Think about including what you did, why you did it, and briefly explaining outcomes? You might also 
-            include whether you were you working alone or with others, as well as with or for a particular government 
-            agency, NGO, university, religious organization, or corporation. Finally, our mapping precision may not 
-            include small towns or rural villages in all countries. Be sure to specify the place you were during your 
-            experience abroad.</p>
-            <textarea id="description" name="description" rows="4" required></textarea>
+          <div className="form-group">
+            <label htmlFor="experience">Tell us about your experience:</label>
+            <textarea id="description" name="description" rows="4" required onChange={handleChange}></textarea>
           </div>
           <button type="submit">Submit</button>
         </form>
       </main>
-      <footer class="pin_footer">
-        This information is on a secure server, and you can choose to share your email or keep it private. 
-        Only the administrator has access to the database. If you have additional questions about the form, 
-        please contact our administrator at cisgomap@up.edu.
+      <footer className="pin_footer">
+        This information is on a secure server, and you can choose to share your email or keep it private. Only the
+        administrator has access to the database. If you have additional questions about the form, please contact our
+        administrator at cisgomap@up.edu.
       </footer>
     </div>
   );
-  
-  
-}
+};
 
 export default AddPin;
